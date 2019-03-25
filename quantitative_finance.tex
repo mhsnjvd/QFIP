@@ -1,0 +1,1404 @@
+%description: Mathematical Article in English (AMS)
+%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
+%% Used as a template by Mohsin Javed
+%% Sep 29, 2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%------------------------------------------------------------
+%
+\documentclass{amsart}
+%
+%----------------------------------------------------------
+% This is a sample document for the AMS LaTeX Article Class
+% Class options
+%        -- Point size:  8pt, 9pt, 10pt (default), 11pt, 12pt
+%        -- Paper size:  letterpaper(default), a4paper
+%        -- Orientation: portrait(default), landscape
+%        -- Print size:  oneside, twoside(default)
+%        -- Quality:     final(default), draft
+%        -- Title page:  notitlepage, titlepage(default)
+%        -- Start chapter on left:
+%                        openright(default), openany
+%        -- Columns:     onecolumn(default), twocolumn
+%        -- Omit extra math features:
+%                        nomath
+%        -- AMSfonts:    noamsfonts
+%        -- PSAMSFonts  (fewer AMSfonts sizes):
+%                        psamsfonts
+%        -- Equation numbering:
+%                        leqno(default), reqno (equation numbers are on the right side)
+%        -- Equation centering:
+%                        centertags(default), tbtags
+%        -- Displayed equations (centered is the default):
+%                        fleqn (equations start at the same distance from the right side)
+%        -- Electronic journal:
+%                        e-only
+%------------------------------------------------------------
+% For instance the command
+%          \documentclass[a4paper,12pt,reqno]{amsart}
+% ensures that the paper size is a4, fonts are typeset at the size 12p
+% and the equation numbers are on the right side
+%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{parskip}
+%------------------------------------------------------------
+% Theorem like environments
+%
+\newtheorem{theorem}{Theorem}
+\theoremstyle{plain}
+\newtheorem{acknowledgement}{Acknowledgement}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{case}{Case}
+\newtheorem{claim}{Claim}
+\newtheorem{conclusion}{Conclusion}
+\newtheorem{condition}{Condition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}{Notation}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{solution}{Solution}
+\newtheorem{summary}{Summary}
+\numberwithin{equation}{section}
+%--------------------------------------------------------
+\begin{document}
+\title[Math Finance]{Mathematical Finance in Practice}
+\author{Mohsin Javed}
+\address[London]
+{Pret A Manger, Marble Arch Station, \newline%
+\indent Oxford Street, London}%
+\email[Mohsin Javed]{mhsnjvd@gmail.com}%
+\urladdr{http://www.zindajaved.com}
+%\thanks{This paper is in final form and no version of it will be submitted for
+%publication elsewhere.}
+\date{September 29, 2017}
+%\subjclass{Primary 05C38, 15A15; Secondary 05A15, 15A18} %
+%\keywords{Keyword one, keyword two etc.}%
+%\dedicatory{Dedicated to ...}
+
+%\begin{abstract}
+%\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+Mathematical finance, as applied to the 
+derivatives market in particular.
+
+\section{Books, Articles and Topics We Should Know}
+\begin{itemize}
+	\item Black Scholes Model (Read Hull or Shreve)
+	\item Change of measure
+	\item Change of numeraire
+	\item Forward measure
+	\item Read Chapter 2 of Brigo/Mercurio
+	\item For Quanto/Compo Read paper by Derman on Foreign indices
+	\item How is a PDE equivalent to an expectation? (Feynman-Kac and all that)
+	\item Forward and backward Kolmograv equations
+	\item Local volatility Model (Dupire equation, in particular)
+	\item How the denominator and numerator of the local vol formula
+	imply arbitrage conditions.
+	\item Stochastic volatility model.
+	\item conditional variance
+	\item \emph{Price is the cost of hedging}
+	\item Understand the following two:
+		\begin{itemize}
+			\item Analogy 1: Volatility -- Theta -- Gamma
+			\item Analogy 2: Correlation -- Theta -- Cross Gamma
+		\end{itemize}	
+	\item Understand the financial implications of the following
+	and how much of a difference they drive from the simple Black Scholes model.
+		\begin{itemize}
+			\item Funding Spreads
+			\item Dividends
+			\item Interest Rates			
+		\end{itemize}	
+	\item Funding Valuation Adjustment (FVA), read paper by Piterbarg
+\end{itemize}
+
+\section{Risk, Return and Sharpe Ratio}
+Excess return, (i.e.\ actual return minus the 
+risk free return) is proportional to risk (i.e.\ volatility).
+
+Let $r$ be the risk free return, $\mu$ and $\mu'$ be the 
+actual returns of two portfolios with volatilites
+$\sigma$ and $\sigma'$. It can be shown that
+the Sharpe ratio of each portfolio is 
+the same \cite{derman_smile}.
+That is,
+\begin{equation}
+\frac{\mu'-r}{\sigma'} = 
+\frac{\mu-r}{\sigma} := \lambda
+\end{equation}
+
+
+\section{Black Scholes Equation in terms of Greeks}
+An easy way to intuitively think of the Black Scholes
+equation is as follows: roughly speaking, the PnL of 
+an option is the sum of $\theta$ and $\Gamma$, note that 
+$\theta$ is negative and $\Gamma$ is positive. This PnL
+should be matched by the growth at the risk free rate
+of the initial hedged portfolio and hence we get,
+\begin{equation}
+\label{bsGreeks}
+\theta + \frac{1}{2}
+\sigma^2 S^2 \Gamma
+= r(C-S\Delta).
+\end{equation}
+Writing the same equation with the partial 
+derivatives we get the more well known form of the 
+Black Scholes equation:
+\begin{equation}
+\frac{\partial C}{\partial t} + \frac{1}{2}
+\sigma^2 S^2 \frac{\partial^2 C}{\partial S^2}
+= r(C-S\frac{\partial C}{\partial S})
+\end{equation}
+
+Now suppose that you have delta hedged the 
+option. This means the right hand side of Equation
+\ref{bsGreeks} is $0$, i.e.,\
+\begin{equation}
+\theta + \frac{1}{2}
+\sigma_{I}^2 S^2 \Gamma = 0,
+\end{equation}
+wher $\sigma_{I}$ is the implied
+volatility of the underlying 
+asset. If we own the option and the 
+realized volatility turns out 
+to be $\sigma_{R}$,
+then our P\&L in a short time period
+$\Delta t$ is 
+\begin{equation}
+\mbox{P\&L} = 
+\frac{1}{2} S^2 \Gamma
+\left(\sigma_{R}^2 - \sigma_{I}^2 \right).
+\end{equation}
+
+$S^2\Gamma = S^2 \frac{\partial^2 C}{\partial S^2}$ 
+is known as the \emph{Dollar Gamma} and has the 
+same unit as the price of the option $C$, hence 
+the name Dollar Gamma.
+
+The net P\&L is given by the equation:
+\begin{equation}
+\mbox{Net P\&L} = 
+\frac{1}{2} 
+\int_{0}^{T}
+S^2 \Gamma
+\left(\sigma_{R}(t)^2 - \sigma_{I}^2 \right) \:dt.
+\end{equation}
+\section{Price and Value}
+According to Derman
+\begin{quote}
+Price is simply what you have to pay to acquire a 
+security; value is what it is worth. The price is fair
+when it is equal to the value.
+\end{quote}
+
+\section*{Motivation for Risk Neutral Pricing}
+Suppose there is a horse race with two horses.
+People place bets of total amounts $x$ and 
+$y$ on the two horses, respectively. The bookmaker has 
+total deposits amounting to $x+y$. 
+
+Based on the bets placed, the bookmaker 
+implies and quotes the odds as $x/y$ for the two horses.
+(This is artificial, as the odds must be known in advance
+for the people to bet the money).
+
+The total amount of money the bookmaker has to pay 
+if the first horse wins is 
+$x + (y/x) x = x + y$, i.e., return the 
+original amount $x$ and the odds times the original
+amount.
+
+Similarly, the total amount of money the bookmaker has to pay 
+if the second horse wins is 
+$y + (x/y) y = x + y$. 
+
+In both cases the bookmaker has to pay $x+y$, which is exactly 
+what he had as a deposit. The bookmaker has no interest 
+in the outcome of the race!
+
+
+\section*{Price of a European call option}
+\begin{equation}
+C = S \mathcal{N} (d_1) - e^{-r(T-t)} K \mathcal{N} (d_2),
+\end{equation}
+where $\mathcal{N}$ is the standard normal 
+cumulative distribution function, while
+\begin{equation}
+d_1 = \frac{\ln(S/K) + (r+\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}, \qquad 
+d_2 = \frac{\ln(S/K) + (r-\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}.
+\end{equation}
+
+Note that as $t \to T$, $C \to S - K$. 
+
+Also useful is the relationship
+\begin{equation}
+d_2 = d_1 - \sigma \sqrt{T-t}.
+\end{equation}
+
+A more intuitive way to think about $d_1$ and 
+$d_2$ is by rewriting them as
+\begin{equation}
+d_1 = \frac{\ln(\frac{S e^{r(T-t)}}{K}) + \frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}, \qquad 
+d_2 = \frac{\ln(\frac{S e^{r(T-t)}}{K}) - \frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}.
+\end{equation}
+\section*{The put--call parity}
+For European options, the put--call
+parity is given by the equation
+\begin{equation}
+S(t) + P(t) - C(t) = K e^{-r(T-t)}.
+\end{equation}
+Another way of remembering the put--call parity is by the 
+phrase: 
+\emph{long call and short put is the same as a forward}.
+\begin{equation}
+C(t) - P(t) = S(t) - K e^{-r(T-t)}.
+\end{equation}
+The put--call parity only holds for European options. 
+\subsection{Price of a forward contract}
+A forward contract is an over the counter (OTC) 
+agreement to buy a stock $S$ at time $T$
+and price $K$. The value $F$ of this forward 
+contract as a function of time $t \leq T$ is:
+\begin{equation}
+F(t) = S(t) - e^{-r(T-t)}K.
+\end{equation}
+
+Note that 
+\begin{equation*}
+F(t)=0 \iff K = S(t) e^{r(T-t)}.
+\end{equation*}
+The economic interpretation of the last 
+equation is simple: it should be free to 
+enter into an at the money forward 
+contract. All other prices will lead
+to arbitrage. 
+
+\section*{Why American calls have the same price as European calls?}
+An American call option of a stock which pays no dividend has the same price 
+as that of the European option. Let the strike price of the call be $K$ and its maturity be $T$. 
+The optimal strategy for a holder of an American call is to exercise it when the value of the 
+option is the same as its intrinsic value. 
+
+At time $T$, the payout of the call plus a bond that
+pays $K$ at time $T$ is
+\begin{equation*}
+(S_T - K )^{+} + K = \max\{S_T, K\} \geq S_T
+\end{equation*}
+
+So at time $t$, if we setup a portfolio that consists of the above call 
+and the above bond, then we have to spend
+\begin{equation*}
+X_t = V_t + Ke^{-r(T-t)},
+\end{equation*}
+where $V_t$ is the price of the call option at time $t$. 
+At time $T$, the value of this portfolio will dominate the stock
+price $S_T$. As a result, no arbitrage implies that at time $t$,
+\begin{equation*}
+X_t > S_t
+\end{equation*}
+Otherwise, we can short\footnote{Short the over-priced asset, go long on the 
+under-priced} one share of stock at time $t$, and use the proceeds to setup this portfolio;
+at time $T$, we have zero probability of losing money, and have a positive probability $P(S_T < K)$ of making
+money. This is an arbitrage!
+Combining the last two equations, we have that
+\begin{equation*}
+V_t > S_t - Ke^{-r(T-t)} 
+> S_t - K.
+\end{equation*}
+Which shows that the value of the option is always strictly greater than its 
+intrinsic value $S_t - K$, therefore
+the holder should not exercise this option before its maturity $T$.
+
+\section{VTS: Volatility Trading Strategies}
+
+\subsection{Volatility, Skew, Smile and the Vol Surface}
+\begin{itemize}
+	\item The volatility $\sigma$, commonly called vol, is usually expressed 
+	on an annualized basis. We can therefore assume that the unit of
+	volatility is per square root of time. Similarly, the unit of 
+	variance (var) is per unit of time. Correspondingly, 
+	the quantities $\sigma \sqrt{T}$ and $\sigma^2 T$ are dimensionless quantities and 
+	represent the total vol and total var attained in time $T$.
+	
+	\item Vol Surface: Volatility $\sigma$ as a function of strike
+	$K$ and maturity $T$, $\sigma(K, T)$.
+	\item ATMF: At the money forward.
+	\item Normalized Strike (NS): For a given maturity $T$ and strike $K$, if the 
+	ATMF vol is $\sigma_{ATMF}$ and the forward value of the underlying asset 
+	is $F$, then the normalized strike $NS$ is defined by the equation,
+		$$NS = \frac{1}{\sigma_{ATMF} \sqrt{T}}\log\left[ \frac{K}{F}\right].$$
+	\item Vol Skew: For a given maturity $T$, the slope of the vol surface
+	slice, defined by the equation, $$Skew = -\frac{1}{\sigma_{ATMF}} \frac{d \sigma(NS)}{dNS}.$$
+	\item Smile: For a given maturity $T$, the curvature of the vol slice defined
+	by the equation,
+	$$Smile = -\frac{1}{\sigma_{ATMF}} \frac{d^2\sigma(NS)}{dNS^2}.$$
+	\item Vol Term Structure: Vol as a function of time to maturity, $\sigma(T)$.
+	\item In the Black Scholes world, $\sigma(K,T)$ is a constant.
+	\item In the FX options market, the vol smile actually looks like a human smile :).
+	\item In the Equity derivatives market, the vol smile is a smirk with a downward slope. 
+	\item Sticky by Strike Vol: The vol does not change as a function of the spot $S$. The vol
+	still changes as a function of the strike $K$. For example, if at the money vol is 
+	$\sigma_0$, one sticky by strike vol model can be 
+	\begin{equation}
+		[TODO] \sigma(S, K, T) = \sigma(K, T) - b ( K - S_0 )	
+	\end{equation}
+\end{itemize}
+
+\subsection{A Short Summary of the Local Vol Model}
+The Local Vol model assumes one factor geometric Brownian motion for the underlying asset where the volatility is a deterministic function of spot and time. Crucially, the following are also assumed 
+to be deterministic:
+\begin{itemize}
+	\item Interest rates
+	\item Equity funding spreads
+	\item Dividend yield 
+\end{itemize}
+The aim of the model is to match the non-arbitrageable input implied vol surface at all
+strikes and maturities. The model can be thought of as a very good interpolator of the
+implied volatility surface, and allows us to accurately price European styles payoffs.
+
+The local vol surface is analogous to the forward rates. 
+Given two zero coupon bonds, with maturities $T_1$ and $T_2$,
+such that $T_1 < T_2$, the forward rate $r$ of a zero coupon starting
+at time $T_1$ and maturing at time $T_2$ is given by the equation
+$$ r_2 T_2 = r_1 T_1 + r (T_2 - T_1 ). $$ 
+This forward rate $r$ is the only rate that is consistent 
+with our market rates $r_1$ and $r_2$.
+
+Similarly, given vols of various maturities and strikes 
+(the discrete vol surface formed by market quotes),
+the \emph{forward vol} aka the local vol is the vol surface 
+which is consistent with the existing discrete vol surface of 
+market quotes.
+
+
+\subsection{A Short Summary of the Risky Log-OU model}
+The Risky Log-OU enhances the local vol model in that it no longer assumes 
+a deterministic funding spread. The model simulates the funding spread of an entity as a 
+stochastic process. The aim of this model is to capture the correlation between 
+equity and funding spreads, giving us conditional (path-wise) risky discounting 
+based on equity levels, making it a richer model compared to a simple local 
+volatility model which has fixed risky discount factors.
+
+\subsection{General Rules}
+\begin{itemize}
+	\item There are four basic \emph{reserves}
+		\begin{enumerate}
+			\item Vega
+			\item Skew
+			\item Funding Spreads
+			\item Dividend
+		\end{enumerate}
+	\item \emph{Funding Spreads}: Let $r_C(t)$ be the CSA backed
+	short rate, i.e., the agreed overnight rate paid on collateral according 
+	to the CSA. We now consider an asset, whose price is some process
+	denoted by $S(t)$. Let $r_R(t)$ be the repo rate of this asset, i.e., the short interest
+	rate we can get if we use the asset as the collateral. Piterbarg calls the difference
+	$r_R(t) - r_C(t)$ as the stock lending fee \cite{piterbarg2010funding}. Following 
+	Piterbarg \cite{piterbarg2010funding}, we also define the short rate for unsecured
+	funding by $r_F(t)$. Now comes the funding spread, which is defined as \cite{piterbarg2010funding}
+	$$ s_F(t) = r_F(t) - r_C(t). $$
+	In essence funding spread of an entity represents the market view
+	of credit default risk of that entity.
+	
+	In the context of equities, \emph{Stock lending fee} is the extra interest rate charged on top 
+	of say LIBOR (or the CSA interest rate) if one wants to  borrow money to buy a stock. One typically puts the stock as the collateral for the funding, which is a risky asset and therefore the lender wants to be rewarded with a risk premium for taking this risk. This is reflected via the stock lending fee.
+	
+	It is expected that 
+		\begin{equation}
+	r_C(t) \leq r_R(t) \leq r_F(t)
+	\label{eq:csa}
+	\end{equation}
+	
+	\emph{Negative Funding Spreads}: Funding spreads can be negative. This can especially happen
+	for short dated maturities. If we have very good credit rating, a short term loan 
+	can be obtained at a rate very close to LIBOR. Suppose we now use the cash we obtained
+	to buy a stock and then lend the stock in the repo market. Effectively, this makes our
+	borrowing cost lower than LIBOR, i.e., we have a negative funding spread. 
+	
+	\item One wrong argument goes like this. Call prices should go down as funding spreads 
+	increase. This is because the	large funding spreads are an indication that the equity is being considered very risky. After all, as a lender, if the money you gave away has the stock as the collateral, the spread you charge is proportional to the risk you imagine for the stock. 
+This is also the reason that Put prices go up as funding spreads increase.
+
+The above argument is wrong. In reality, call prices go up as funding spreads go up and put prices go down as funding spreads go up. The reason -- option pricing is done via hedging -- not via the 
+market view argument presented above. If you are selling a call option, you hedge it with 
+buying delta. The cost of funding to buy your delta increases as the funding spreads increase and 
+as a result, the cost of the option you are selling goes up as well. Similarly, if you are selling
+a put option, you are going to short some delta. However, when you short a stock, you have to 
+pay a borrowing fee which moves in opposite direction to the funding spread 
+[check this last sentence]. 
+
+	
+	\item Call prices go down as dividends increase. The equity spot will be down if 
+	dividends increase which results in a lower call price. Correspondingly, put prices
+	go up if dividends go up. 
+\end{itemize}
+
+\subsection{Miscellaneous}
+\begin{itemize}
+	\item \emph{Call Overwrite (Buy-Write)}: Go long the stock and 
+	short a slightly OTM short dated Call. This caps your profit but the 
+	proceeds of the premium contribute towards reducing the cost of
+	stock buying and therefore enhance the yield. 
+\end{itemize}
+	
+\subsection{Out-performance Options}
+\begin{itemize}
+	\item An out-performance option of an asset $A$ over another asset $B$ pays
+	$\max\{A-B, 0\}$ at expiration. By convention, out-performance options are always 
+	quoted as \emph{a Call of $A$ over $B$}.
+	
+	\item Out-performance options are usually European.
+	
+	\item Out-performance options are short correlation. Extreme case: suppose you 
+	have two assets, $X$ and $Y$:
+	\begin{equation}
+	\sigma^2_{X-Y} = \sigma^2_X + \sigma^2_Y - 2 \rho_{XY}\sigma_X\sigma_Y,
+	\end{equation}
+	If $\rho_{XY}$ goes up to $100\%$ the variance on the left is 
+	minimum, i.e.\ the option has the least price. If $\rho_{XY}$ goes all the 
+	way down to $-100\%$, we the variance $\sigma^2_{X-Y}$ is maximized.	
+\end{itemize}
+
+\subsection{Worst-Of and Best-Of Options}
+We will use $W$ for worst-of and $B$ for 
+best-of, and the subscripts $C$ and $P$ for 
+Calls and Puts respectively. Assume there 
+are $n$ underlying assets. Then, the payoff 
+worst-of and best-of options is given by
+\begin{align}
+W_C &= \max\{\min_{i=1, 2, \ldots, n}\{S_i - K\}, 0\},\\
+W_P &= \max\{\max_{i=1, 2, \ldots, n}\{K - S_i\}, 0\},\\
+B_C &= \max\{\max_{i=1, 2, \ldots, n}\{S_i - K\}, 0\},\\
+B_P &= \max\{\min_{i=1, 2, \ldots, n}\{K - S_i\}, 0\}.
+\end{align}
+
+Worst-of call options are traded much more than best-of call options because 
+worst-of call options are very cheap. 
+
+Worst-of put options are traded much more than best-of put options despite being
+quite expensive. This is due to the fact that worst-of put options provide 
+protection and are high in demand. 
+
+\subsubsection{Worst-Of Calls}
+\begin{itemize}	
+	\item If we lower the correlation between the assets, the price of worst-of call 
+			  decreases. Intuitive reason, the stocks are more dispersed and the chance that one 
+				of them is below the strike is relatively higher. Indeed, worst-of call will be 
+				worthless even if a single asset is below the strike. Hence, worst-of call have a lower
+				price if the correlation is low.
+	\item If the correlation goes up, the price of worst-of call also goes up. Extreme case, if
+				we have two assets which are $100\%$ correlated, the price of the worst-of call on the 
+				two assets is the same as the price of cheaper of the two.
+				
+	\item Related to the above, a worst-of call is long correlation.
+	\item Typically, clients buy worst-of calls as it gives them a cheaper way of 
+				getting exposure to the upside. As a result of the trade, the clients go 
+				long correlation. When a trading 
+				desk sells worst-of calls, it gets a short correlation exposure, 
+				typical position of an exotic derivative desk.
+				
+\end{itemize}
+
+
+\subsubsection{Worst-Of Puts}
+\begin{itemize}
+	\item Worst-of put options are very expensive but still traded as they provide protection. The price 
+				of a worst-of put is higher than any of the puts on the underlying assets. 
+			  
+	\item If we lower the correlation between the assets, the price of worst-of put
+			  increases. Intuitive reason, the stocks are more dispersed and the chance that one 
+				of them is deep down below the strike is relatively higher. Indeed, worst-of put will 
+				pay according to the worst asset which has gone down the most. Hence, worst-of puts have a
+				higher price if the correlation is low.
+				
+	\item If the correlation goes up, the price of worst-of puts goes down (but only relatively, they are 
+				already quite expensive). Extreme case, if
+				we have two assets which are $100\%$ correlated, the price of the worst-of puts on the 
+				two assets is the same as the price of more expensive of the two.
+				
+	\item Related to the above, worst-of puts are short correlation.
+	\item When we sell worst-of puts, we are long correlation, i.e.\ we want the 
+			  correlation to go up so that we have to pay less on the short put positions. 
+							
+	\item A trading desk usually buys worst-of-puts (clients like to sell these since they look expensive when compared 
+	to basket puts, or individual puts). The desk therefore ends up short correlation (classic exotic position). Due to 
+	correlation skew the Bid price can be quite high compared to other buyers in the market. Therefore, there is sometimes pressure to bid 
+lower to be competitive since other market participants might not be charging as much correlation skew.
+\end{itemize}
+
+\subsubsection{Worst-Of Options and the Correlation Skew}
+Suppose we are long a WO put, which gives us a 
+short correlation exposure. If the spot goes down,
+the correlation will go up and because of the correlation 
+skew, the correlation is likely to go up high enough 
+such that the increase in value
+of our put due to spot going down will be offset 
+to a great extent by the correlation going up. 
+
+On the other hand, if the spot goes up the correlation 
+goes down, but because of the correlation skew,
+it goes down very little. Our put goes cheaper due to 
+the spot going up and the offsetting 
+benefit we get from the correlation going down
+is small due to the correlation skew.
+
+In either case, the correlation skew is hurting us.
+Hence, if we are buying a WO put, we should
+charge extra for the correlation skew.
+\subsection{Convexity}
+$9 = 5^2-4^2 > 4^2 - 3^2 = 7$ and this is called convexity.
+If you are long a convex payoff, you make more money 
+on the up move than you would lose on a down move of equal magnitude.
+
+Mathematically, for $x>0$,
+$(x+\delta x)^2 - (x - \delta x )^2 \simeq 4x\delta x > 0$.
+
+\section*{Modes of convergence of a sequence of random variable}
+Let $X_n$ be a sequence of random variables defined on a probability 
+space. 
+
+We say that 
+\begin{enumerate}
+\item $X_n \to X$ almost surely 
+if for sufficiently large $n$
+$P(|X_n(\omega)-X(\omega)| < \epsilon) = 1$.
+\item $X_n \to X$ in probability 
+if 
+
+\item $X_n \to X$ in distribution
+if for all $z \in \mathbb{R}$, 
+$F_n(z) \to F(z)$, where
+$F_n$ is the distribution function of 
+$X_n$ and $F$ is distribution function 
+of $X$.
+\end{enumerate}
+
+\section*{Derivatives on Foreign Indices}
+Let $X$ be the value of 1 JPY in GBP as
+a function of time. We also suppose that 
+$X_0$ is the value of $X$ at $t=0$ and 
+$X_T$ is the value of $X$ at expiration time $T$.
+Let $K$ be the strike price in JPY and 
+let $S$ be the price of a stock in JPY, again
+as a function of time. 
+
+The underlying asset in all of the following cases
+is a stock with the value $S$, denominated in JPY. 
+
+\begin{enumerate}
+\item \emph{Foreign-market derivatives}:
+Buy JPY denominated derivative by converting 
+your GBP into JPY today. At expiry, 
+you will convert the JPY payoff back
+into GBP at the prevailing exchange rate.
+You are exposed to both the asset and 
+the FX.
+\begin{equation}
+\max\{0, X_T(S_T - K)\}.
+\end{equation}
+\item \emph{Compo}:
+The derivative in this case
+derives its value by converting the value 
+of the Japanese asset from JPY to 
+GBP at the prevailing exchange 
+rate. You are still exposed to the 
+asset and the FX but this exposure 
+is different from the previous case.
+\begin{equation}
+\max\{0, X_T S_T - K_{\$})\}.
+\end{equation}
+
+
+\item \emph{Quanto}: The payoff of the 
+derivative in this case is the
+JPY value of the derivative at the 
+time of expiry
+converted to GBP at a guaranteed
+exchange rate decided at the start 
+of the contract. You are still exposed
+to the performance of the underlying asset.
+\begin{equation}
+\max\{0, X_0(S_T - K)\}.
+\end{equation}
+
+\end{enumerate}
+
+\section{Credit Risk}
+\subsection{Hazard Rate}
+The hazard rate (also called default intensity) is the probability 
+of default for a certain time period \emph{conditional} on no earlier default.
+In general, the hazard rate will be different when different time periods
+are considered. Note that hazard rate is a probability. 
+
+Let $X$ be the random variable representing the time (in years)
+when the company defaults. For a simple hazard rate model, 
+we assume that 
+$$P( X \leq t ) = 1 - \exp( -h t ),$$ i.e.\
+$X$ is exponentially distributed with $h$ can be though 
+of as the average hazard rate.
+The interpretation of $h$ is given by the equation,
+$$P( t \leq X \leq t + \delta t | X > t ) \approx h \delta t. $$
+In other words, for this model, the hazard rate (i.e.\ probability of default) 
+for a small period $\delta t$ is $h \delta t$
+
+Note that 
+\begin{enumerate}
+	\item The default probabilities backed out of bond prices or credit default 
+	swap spreads are risk-neutral default probabilities.
+	\item The default probabilities backed out of historical data are 
+	real-world default probabilities.
+\end{enumerate}
+
+\section{Probability and Stochastic Calculus}
+
+\begin{definition}[Probability Space]. 
+A triple $(\Omega, \mathcal{F}, \mathcal{P})$.
+$\Omega$ is a set, $\mathcal{F}$ is a sigma-algebra
+on $\Omega$ and $\mathcal{P}: \mathcal{F} \to [0, 1]$,
+such that 
+\begin{enumerate}
+	\item $P(\Omega)$ = 1
+	\item For any countable, mutually disjoint sets in $\mathcal{F}$, the function $\mathcal{P}$
+	is additive.
+\end{enumerate}
+\end{definition}
+\begin{definition}[Measure]
+The function $\mathcal{P}$ above is called a measure.
+\end{definition}
+
+\subsection*{Brownian Motion}
+Brownian motion is a stochastic 
+process $B(t)$, such that 
+\begin{enumerate}
+\item $B(0)=0$.
+\item For any $t_1 < t_2$, $B(t_2)-B(t_1)$ is 
+independent of $B(t_1)$ and normal with zero mean and 
+variance $t_2-t_1$. 
+\item $B(t)$ is continuous almost surely.
+\end{enumerate}
+
+Let $\tau_m := \inf \{ t: B(t) = m \}$, i.e.\
+$\tau_m$ is the time (a random variable)
+when Brownian motion $B$ hits the 
+level $m$ for the first time.
+
+Notice that 
+\begin{equation}
+\tau_m = \inf \{ B(t) \geq m\}
+\end{equation}
+
+What is the probability $P(\tau_m \leq T)$?
+
+\begin{equation*}
+P(\tau_m \leq T) = 
+P(\tau_m \leq T \cap B(T) \geq m ) + 
+P(\tau_m \leq T \cap B(T) < m ).
+\end{equation*}
+Now,
+\begin{equation}
+P(\tau_m \leq T \cap B(T) \geq m ) = P( B(T) \geq m ), 
+\end{equation}
+and by using the reflection principle,
+\begin{equation}
+P(\tau_m \leq T \cap B(T) < m ) = P( B(T) \geq m ), 
+\end{equation}
+Therefore,
+\begin{equation}
+P(\tau_m \leq T) = 2 P(B(T) \geq m ).
+\end{equation}
+
+
+\begin{align}
+P(\tau_m \leq t) &= 2 P(B(t) \geq m )\\
+                 &= 2 \frac{1}{\sqrt{2\pi}} \int_{m}^{\infty} e^{-\frac{x^2}{2t}} \: dx\\								
+\end{align}
+Therefore, the density function of
+$\tau_m$ is obtained by differentiating the last expression 
+with respect to $t$:
+\begin{equation}
+f_{\tau_m} (t) = 
+\end{equation}
+
+\subsection*{Log-normal random variable}
+If the log of a random variable $X$ is 
+Normal, then $X$ is called a log-normal
+random variable.
+\begin{equation}
+\ln X = \sigma Z + \mu,
+\end{equation}
+where $Z$ is a
+standard normal: $Z \sim \mathcal{N}(0, 1)$.
+
+\begin{equation}
+X = e^{\sigma Z + \mu}.
+\end{equation}
+The expected value of $X$ is 
+given by the formula
+\begin{equation}
+E[X] = e^{\sigma^2/2 + \mu}.
+\end{equation}
+
+\subsection{Ito's Formula}
+\subsection{Ito's Formula for Brownian Motion}
+Let $W(t)$ be a Brownian motion. Let $f: \mathbb{R} \to \mathbb{R}$ 
+be a function with continuous second derivative, 
+then 
+\begin{equation}
+df(W(t)) = f'(W(t)) dW(t) + \frac{1}{2} f''(W(t)),
+\qquad \mbox{(Differential Form)}
+\end{equation}
+or
+\begin{equation}
+f(W(t)) - f(W(0)) = \int_0^t f'(W(s)) dW(s) + 
+\frac{1}{2} \int_0^t f''(W(s)) dW(s),
+\qquad \mbox{(Integral Form)}.
+\end{equation}
+
+
+\subsection{Ito's Formula for a useful stochastic process}
+Let $W(t)$ be a Brownian motion. Let us define the stochastic
+process $X(t)$ via the stochastic differential equation
+\begin{equation}
+dX(t) = \mu( X(t), t ) dt + \sigma( X(t), t ) dW(t).
+\label{eq: Xt}
+\end{equation}
+We also assume that $f(t,x)$
+is a function with continuous derivatives $f_t, f_x$ and
+$f_{xx}$. Then, the differential form of 
+Ito's formula expresses the differential 
+increment of $f( X(t), t )$ by
+\begin{equation}
+df(t, X(t)) = f_t(t, X(t)) dt + f_x(t, X(t)) dX(t) + 
+\frac{1}{2} f_{xx}(t, X(t)) dX(t)^2,
+\end{equation}
+while the integral form is
+\begin{equation}
+f(T,X(T)) - f(0, X(0)) = \int_0^T f_t(t, X(t)) dX(t)  + 
+\int_0^T f_x(t, X(t)) dX(t) + 
+\frac{1}{2} \int_0^t f_{xx}(t, X(t)) dX(t).
+\end{equation}
+
+For Geometric Brownian Motion (GBM), the
+SDE can be obtained by setting
+$\mu(X(t), t) = \mu_0X(t)$ and 
+$\sigma( X(t), t) = \sigma_0X(t)$ in 
+Equation \eqref{eq: Xt}. This is usually
+written as (abusing notation a little bit by identifying 
+$\mu$ and $\sigma$ as constants, 
+\begin{equation}
+dX(t) = \mu X(t)dt + \sigma X(t)dW(t),
+\end{equation}
+where $X(t)$ is the price of the stock.
+
+The solution of the above SDE is
+\begin{equation}
+X(t) = X(0)\exp\left[ (\mu - \frac{1}{2} \sigma^2) t + \sigma W(t)\right]
+\end{equation}
+
+
+$W(t)$ is a martingale. Indeed, for any $t > s$,
+\begin{align*}
+E[ W(t+s) | \mathcal{F}_s ] &= 
+E[ W(t+s) - W(s) +  W(s) | \mathcal{F}_s ]   \\
+&= W(s) + E[ W(t+s) - W(s) | \mathcal{F}_s ] \\
+&= W(s).
+\end{align*}
+
+$e^{\sigma W(t)}$ is not a martingale. One can check this by applying the 
+Ito's Lemma. Let $f(W(t)) = e^{\sigma W(t)}$, then
+\begin{equation}
+df(W(t)) = \sigma W(t)dW(t) + \frac{1}{2}\sigma^2 dt.
+\end{equation}
+Because of the non-zero drift term, $f$ is not a martingale.
+
+$e^{\left(\sigma W(t) - \frac{1}{2}\sigma^2 t\right)}$ is a martingale.
+Again, we can check this using Ito's Lemma. 
+Let $f(W(t)) = e^{\sigma W(t)-\frac{1}{2}\sigma^2 t}$, then
+\begin{equation}
+df(W(t)) = -\frac{1}{2}\sigma^2 W(t) dt + \sigma W(t)dW(t) + \frac{1}{2}\sigma^2 W(t)dt
+= \sigma W(t)dW(t).
+\end{equation}
+There is no drift term, hence $f$ is a martingale.
+
+The moment generating function of $X \sim N(\mu, \sigma)$ is 
+\begin{equation}
+\phi(s) = E[ e^{sX} ] = e^{s\mu}e^{\frac{s^2\sigma^2}{2}}
+\end{equation}
+
+Using the above result, we see that
+\begin{align*}
+E[e^{\sigma W(t+s)} | \mathcal{F}_s] 
+&= E[e^{\sigma (W(t+s) - W(s) + W(s))} | \mathcal{F}_s]\\
+&= e^{\sigma W(s)}E[e^{\sigma (W(t+s) - W(s))}| \mathcal{F}_s]\\
+&= e^{\sigma W(s)}e^{\frac{1}{2}\sigma^2 t^2}\\
+&= e^{\sigma W(s) + \frac{1}{2}\sigma^2 t^2}\\
+&\neq e^{\sigma W(s)}.
+\end{align*}
+Therefore, $e^{\sigma W(s)}$ is not a martingale. Note that 
+we have used the fact that 
+\begin{equation}
+W(t+s) - W(s) \sim N(0, t), 
+\end{equation}
+and also the formula for the moment generating 
+function for $N(0, t)$.
+
+\subsection*{Change of measure}
+Consider $X$, a standard normal 
+random variable defined on the 
+probability space $(\mathbb{R}, \mathcal{F}, \mu_X)$, where
+$\mathcal{F}$ is the $\sigma$-algebra 
+of open sets in $\mathbb{R}$ and
+for a Borel set $B$,
+\begin{equation*}
+\mu_X(B) := \frac{1}{\sqrt{2 \pi} }
+\int_{B} e^{-\frac{x^2}{2}} \: dx.
+\end{equation*}
+
+The expectation of a Borel measurable function 
+$f$ under the probability measure 
+$\mu_X$ is given as
+\begin{equation*}
+E_0[f(X)] = \int_{-\infty}^{\infty} f(X) d\mu_X,
+\end{equation*}
+where the subscript $0$ in the expectation is to 
+emphasize that the mean of $X$ is $0$. What if
+we now want to change the mean of the distribution
+to a new number say $m$. How is the expectation of
+$f$ under the old measure related to the 
+expectation under the new measure?
+The answer is easy in this case:
+\begin{align*}
+E_0[f(X)] &= \int_{-\infty}^{\infty} f(X) d\mu_X \\
+					&= \int_{-\infty}^{\infty} f(X) e^{-X^2/2} \: dX \\
+					&= \int_{-\infty}^{\infty} f(X) e^{-mX + \frac{m^2}{2}}e^{-\frac{(X-m)^2}{2}} \: dX \\
+					&\equiv E_m\left[f(X)e^{-mX + \frac{m^2}{2}}\right].\\
+\end{align*}
+
+
+The collection of theorems that tell us how to make 
+drift disappear is commonly called Girsanov theory
+\cite[Ch.\ 13]{steele2001stochastic}.
+
+
+\section{Matrices}
+Given a square $n \times n$ matrix $A$, we can find the $LU$ decomposition 
+of $A$ such that 
+\begin{equation}
+PA = LU,
+\label{eq:LU}
+\end{equation}
+where $P$ is a permutation matrix, $L$ is a lower triangular
+and $U$ is an upper triangular.
+
+The algorithm to compute the matrices $L$ and $U$, given $A$ is 
+essentially the row reduced echelon form computation of $A$. 
+We want to apply a sequence of matrices $L_i$ such that 
+$A$ gets transformed into $U$. 
+\begin{equation}
+L_1 L_2 \ldots L_{n-1} PA = U,
+\label{}
+\end{equation}
+where each $L_i$ is a lower triangular matrix
+which introduces zeros in the $i^{th}$ column
+below the diagonal. 
+
+If $A$ is Hermitian and semi-positive definite
+
+\subsection{Cholseky Decomposition in Finance}
+The fundamental use of Cholesky decomposition 
+in finance is to generate a vector of correlated
+samples from a vector of uncorrelated samples, where
+the correlations are specified by the correlation 
+matrix. This correlation matrix, say $A$ is by 
+construction real, symmetric, and positive semi-definite.
+
+\subsubsection{Example:}
+Suppose we have two independent zero mean random variables 
+$Z_1$ and $Z_2$ with variances $\sigma_1$ and $\sigma_2$, 
+respectively, and we want to construct two correlated random variables
+$X_1$ and $X_2$, again with variances $\sigma_1$ and $\sigma_2$ respectively,
+but now we want the correlation between $X_1$ and $X_2$ to be $\rho$. 
+
+The correlation matrix in this simple $2 \times 2$ case is
+\begin{equation}
+A = \left[
+\begin{array}{cc}
+	1    & \rho\\
+	\rho & 1
+\end{array}
+\right].
+\label{}
+\end{equation}
+
+The Cholesky decomposition is very simple (think RREF):
+\begin{equation}
+A = \left[
+\begin{array}{cc}
+	1    & 0\\
+	\rho & 1
+\end{array}
+\right]
+\left[
+\begin{array}{cc}
+	1  & \rho\\
+	0  & 1 - \rho^2
+\end{array}
+\right].
+\label{}
+\end{equation}
+We can write this in the form where 
+diagonal of L and U both are 
+replaced by the squar root of their
+products, and we get
+\begin{equation}
+A = \left[
+\begin{array}{cc}
+	1    & 0\\
+	\rho & \sqrt{1-\rho^2}
+\end{array}
+\right]
+\left[
+\begin{array}{cc}
+	1  & \rho\\
+	0  & \sqrt{1 - \rho^2}
+\end{array}
+\right].
+\label{}
+\end{equation}
+
+It can be shown, that applying $L$ on the vector $z$
+gives us the required correlated vector $x$:
+\begin{equation}
+\left[
+\begin{array}{c}
+	  x_1 \\
+		x_2 
+\end{array}
+\right] 
+= \left[
+\begin{array}{cc}
+	1    & 0\\
+	\rho & \sqrt{1-\rho^2}
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+	  z_1 \\
+		z_2 
+\end{array}
+\right]
+\label{}
+\end{equation}.
+
+\section{Using Chebyshev Methods}
+\begin{enumerate}
+\item write a basic core
+\item must have a root finder
+\end{enumerate}
+
+Where can it be used?
+\begin{enumerate}
+\item Corr Bump: It's a 1d root finding problem
+\end{enumerate}
+
+\section*{Questions}
+\begin{enumerate}
+\item Estimate the derivative of $x^x$ at $x=2$.
+
+We have:
+\begin{align*}
+\frac{d}{dx}x^x &= \frac{d}{dx} e^{ x\ln x} \\
+&= e^{x \ln x }\frac{d}{dx}(x \ln x)\\
+&= x^{x}\frac{d}{dx}(\ln x + 1 ).
+\end{align*}
+At $x=2$, the last expression is roughly equal to
+$2^2(.7 + 1 )=6.8$.
+\item What are the eigenvalues of an $n \times n$
+ matrix all of whose entries are a constant?
+
+The rank of this matrix is $1$, so $0$ is an eigenvalue
+with multiplicity $n-1$. The only non-zero eigenvalue
+is $n$ and the corresponding eigenvector is 
+a vector of all ones. 
+
+\item Let $X$ be a random vector in $\mathbb{R}^n$ whose
+$n \times n$ variance-covariance 
+matrix is $\Sigma$. What is the variance-covariance matrix of 
+$AX$ where $A$ is an $n \times n$ matrix?
+
+\begin{equation*}
+Var(AX) = A \Sigma A^{T}
+\end{equation*}
+
+An important example of the above is when $X=Z$ i.e.,
+a random vector of i.i.d standard normals. In that case
+$\Sigma = I$ and the variance-covariance matrix 
+of $AZ$ is $AA^T$.
+
+\item You roll a hundred sided die and note the number 
+that appears. How many rolls you need on average 
+to see the same number again?
+
+The answer is $100$. You roll the first time and get 
+some number, say $12$. Your probability of getting a $12$
+on any following roll is $1/100$. You therefore need
+$100$ more rolls on average to get the same number again. 
+
+\item Roll $3$ standard six-sided dice together. What is the 
+probability that the max is less than or equal to $3$.
+
+Max less than or equal to $3$ is the same as each of the 
+three dice independently showing a number less than or equal to $3$. 
+Therefore, the probability is $(1/2)(1/2)(1/2) = 1/8$. (We have used the fact
+that the probability of a six-sided dice showing a 
+number less than or equal to $3$ is $1/2$.)
+
+\item Let $X$ be a discrete random variable which
+takes values in $\lbrace 1, 2, 3 \rbrace$ with 
+equal probability. What is the standard deviation of $X$?
+If we take three independent samples $X_1, X_2$ and 
+$X_3$, what is the standard deviation of the sum 
+$S = X_1 + X_2 + X_3$?
+
+By calculation, $\sigma_X = \sqrt{2/3}$ and 
+$\sigma_S = \sqrt{2}$
+
+\item Let $X$ and $Y$ be two random variables with
+$\sigma_X=2$, $\sigma_Y=3$. If $\sigma_{X+Y} = 5$, 
+then what is the correlation $\rho_{XY}$?
+
+We use the formula:
+\begin{align*}
+\sigma_{X+Y}^2 &= \sigma_{X}^2 + \sigma_{Y}^2 + 2 \rho_{XY} \sigma_X \sigma_Y,
+\end{align*}
+which implies
+\begin{align*}
+2 \sigma_X \sigma_Y = 
+2 \rho_{XY} \sigma_X \sigma_Y
+\end{align*}
+i.e.\,
+\begin{align*}
+\rho_{XY} = 1.
+\end{align*}
+
+\item Generic version of the above question. If 
+$\sigma_{X+Y} = \sigma_X + \sigma_Y$, then what is the 
+value of $\rho_{XY}$?
+
+We have:
+\begin{align*}
+(\sigma_X + \sigma_Y)^2 = \sigma_{X+Y}^2 &= \sigma_{X}^2 + \sigma_{Y}^2 + 
+2 \rho_{XY} \sigma_X \sigma_Y,
+\end{align*}
+where the first equality is given and the second is by 
+definition. This simplifies to 
+\begin{align*}
+2\sigma_X \sigma_Y = \rho_{XY} 2\sigma_X \sigma_Y,
+\end{align*}
+which implies $\rho_{XY} = 1$.
+
+\textbf{Intuition:} The standard deviation
+does not add linearly for uncorrelated variables. 
+If correlation between two variables is zero, then 
+the \emph{variance} of the sum is indeed additive
+but we have the basic identity for $a, b>0$:
+\begin{align*}
+\sqrt{a + b}<\sqrt{a} + \sqrt{b},
+\end{align*}
+from which it follows that the standard deviation of 
+the sum would be
+strictly less than the sum of individual 
+standard deviations. Given that the standard 
+deviations added up linearly in our case gives us 
+a hint that the variables must be highly positively correlated. 
+
+
+\item Approximate $\log_{7}1250$ 
+
+\item Approximate $4^{3.6}$
+
+\item the mean and variance of a random variable $X$ is $10$. What is
+$E[X^2]$?
+
+\item You pick three uniform i.i.d samples from $[0,1]$. What the 
+expected value of the product of the maximum and the minimum.
+
+\item Consider the following game with a six-sided standard dice. 
+If you roll $1,2$ or $3$, you roll again. If you 
+roll $4$ or $5$, you get the number of dollars equal 
+to the number of rolls you have rolled so far, including the last
+roll. If you roll a $6$, the game ends and you get nothing. On 
+average, how many dollars are you expected to make by 
+playing this game?
+
+Let's first solve an easier game: in the modified game, you can
+roll again if you get $1, 2$ or $3$ as before but 
+if you roll $4,5$ or $6$ on your $k^{th}$ roll, you get 
+$k$ dollars. In this case, you can map the game to a fair 
+coin, since the 
+probability of getting a value in the set $\{ 1,2,3 \}$ or 
+in the set $\{ 4,5,6 \}$ is each $1/2$. The expected number of 
+throws to get an outcome in the set $\{4, 5, 6 \}$ is 
+therefore $1/(1/2)=2$ and on average you make \$2 playing this 
+game. 
+
+Now, we come back to the original question. One thing to notice is
+that on average, the original game must pay less than the modified 
+game above because in the original game you either get paid nothing 
+or you get paid the same amount that the modified game would pay. 
+Since the good outcomes are $2/3$ times the outcomes of the 
+modified game, the expected value of the original game is 
+also $2/3$ times the expected value of the modified game.
+The final answer is  $(2/3)(2) = 4/3$.
+
+We can also solve this problem in the classical mathematical way.
+
+Let $X$ be the random variable that you win $k$ dollars 
+by rolling a $4$ of $5$ at the $k^{th}$ roll. Then 
+$P(X=k)$ is given by the expression,
+\begin{align*}
+P(X=k) = (1/2)^{k-1}(2/6),
+\end{align*}
+i.e.\ for the first $(k-1)$ rolls you got $1,2$ or $3$, each independently 
+with probability $1/2$ and then on the $k^{th}$ go, you rolled 
+a $4$ or a $5$ with probability $2/6$.
+
+The expected value of $X$ is given by:
+\begin{align*}
+E[X] &= \sum_{k=1}^{\infty} k P(X=k)\\
+&= (1/3)\sum_{k=1}^{\infty} k (1/2)^{k-1}\\
+\end{align*}
+
+\item What are the eigenvalues of an $n \times n$ 
+matrix all of whose off diagonal entries are 
+a constant and the diagonal has ones?
+
+Let $A$ be the matrix in question and 
+$c$ be the off diagonal constant. We can write
+$A$ as
+\begin{equation}
+A = cW + (1-c) I,
+\end{equation}
+where $W$ is a matrix of all ones and 
+$I$ is the identity matrix. 
+
+The eigenvalue problem can now be transformed as
+\begin{equation}
+A - \lambda I = 0 
+\iff
+W - \left(\frac{\lambda + c - 1}{c}\right) I  
+= W - \omega I = 0,
+\end{equation}
+where $\omega = \frac{\lambda + c - 1}{c}$.
+
+Now, the eigenvalues of $W$ are $0$ and $n$, where
+$n$ is the dimension of $W$. This is true 
+since $W$ is of rank 1 which implies zero is an 
+eigenvalue of multiplicity $n-1$. Also, a vector of all ones 
+is an eigenvector of $W$ with $n$ as the eigenvalue. 
+
+Therefore, 
+\begin{equation}
+\omega = 0 \iff
+\frac{\lambda + c - 1}{c} = 0
+\implies \lambda = 1 - c.
+\end{equation}
+
+And
+\begin{equation}
+\omega = n \iff
+\frac{\lambda + c - 1}{c} = n
+\implies \lambda = 1 + (n-1)c.
+\end{equation}
+
+
+\item A first order Taylor approximation of a 
+convex function always underestimates the
+function:
+\begin{equation}
+e^{x} - ( 1 + x ) > 0, \qquad  x \in \mathbb{R}.
+\end{equation}
+Can we prove this? [TODO]
+
+\item Let $X$ be a standard normal variable,
+$a \in \mathbb{R}$ and $p = P( X \leq a )$.
+Define a new random variable $Y = -X$. What is 
+$P( Y \leq a )$?
+
+\begin{align}
+P( Y \leq a ) &= P( -X \leq a )\\
+&= P( X \geq -a )\\
+P( Y \leq a ) &= P( X \leq a ) = p.
+\end{align}
+In the last step, we have used the symmetry property of 
+the cumulative distribution function of a standard normal 
+variable. 
+
+Intuitively, the result makes sense\footnote{It does not have to,
+some results in probability are counter intuitive to most people. 
+Also, what some people think intuitive might not be intuitive to 
+others. Intuition is subjective.}. A normal 
+random variable is symmetric around the origin. Its 
+distribution does not change when we reflect it across the origin.
+
+\item Let us consider the Indicator function $I(X>30)$, where
+$X$ is a standard normal variable. 
+Suppose you want to naively compute the expected value of 
+$I(X>30)$. Note that this number is strictly greater than
+$0$, since
+\begin{equation*}
+E[I(X>30)] = P(X>30) = \phi( -30 ) > 0.
+\end{equation*}
+However, if we apply the \emph{standard} approach 
+of approximating the expected value via the 
+discrete sampling
+\begin{equation*}
+E[I(X>30)] \simeq \frac{1}{N}\sum_{i=1}^{N} I(X_i>30), 
+\end{equation*}
+what is the expected value of $N$ to make the 
+sum greater than zero?
+
+\emph{Answer}: Convert the problem to 
+a geometric random variable, with the 
+success probability $p = \phi(-30)$. 
+Therefore $E[N] = 1/\phi(-30)$. 
+
+\item What is $\frac{1}{\sqrt{2\pi}}$ approximately?
+
+\emph{Answer}: $0.4$.
+
+Polya's Urn: An urn has $n_b=95$ black balls
+and $n_w=5$ white balls. Therefore, the ratio 
+$r_b$ of black balls to the total number of 
+balls in the urn is 
+\begin{equation}
+r_b = \frac{n_b}{n_b + n_w} = 0.95.
+\end{equation}
+You start a game, where 
+you pick a ball randomly and if the ball
+is black, you 
+add some more black balls and if it's white you 
+add some more white balls. Suppose you have 
+done this a few million times and you ask 
+now, what is the expected value of the 
+ratio $r_b$ now?
+
+\emph{Answer} $.95$. The ratio is a martingale with 
+respect to the stochastic process.
+Let $r_{bk}$ be the ratio at the $k^{th}$ 
+turn. At the $(k+1)^{st}$ turn, we have 
+\begin{align}
+E[ r_{b(k+1)} ] &= 
+\left( \frac{n_{bk}}{n_{bk} + n_{wk}} \right)
+\frac{n_{bk} + f(k)}{n_{bk} + n_{wk} + f(k)} +
+\left( \frac{n_{wk}}{n_{bk} + n_{wk}} \right)
+\frac{n_{bk}}{n_{bk} + n_{wk} + f(k)}\\
+&= \left( \frac{n_{bk}}{n_{bk} + n_{wk}} \right)
+\frac{n_{bk} + n_{wk} + f(k) }{n_{bk} + n_{wk} + f(k)}\\
+&= \frac{n_{bk}}{n_{bk} + n_{wk}}\\
+&= r_{bk}.
+\end{align}
+
+
+\end{enumerate}
+
+
+\section*{Maxims}
+Frictions are of great importance in financial markets;
+they are in many ways the krill that feed the financial 
+Leviathans.
+
+The first step in either finance or mechanics is to 
+consider models that are free of frictions. 
+
+Let $s$ be the sentiment function of 
+gaining wealth. An obvious question is
+to compare $s(x)$ with $s(-x)$. In other words,
+how is gaining a hundred pounds different from 
+loosing a hundred pounds? Of course, one is making 
+you happier and the other is making you sad but 
+can the happiness and sadness be quantified? and 
+if so, are they equal?
+
+One can argue that $s$ is linear close to the 
+origin. But what happens as $|x|$ increases?
+If you win a billion you are very happy, but if you 
+loose a billion you may very well be broke. You can 
+always gain unlimited amount of money but you always 
+have a limited amount of money to loose, so 
+\begin{equation}
+s(x) \neq -s(-x).
+\end{equation}
+
+Another way of thinking about this is the following 
+game. Suppose your annual salary is a hundred pounds
+and you are invited to play a fair game in which you 
+might win or lose a hundred pounds. Will you play that 
+game? How about a game in which you might win or lose 
+only one pound?
+
+\section{Glossary}
+\begin{itemize}
+	\item Bond Yield: A single discount number, under which
+	the sum of the present values of all the cash flows of a bond equal 
+	its market price. Let $t$ be the current time, $C_i$ the cash flow generated by the bond at
+	time $t_i \geq t$, $P_m(t)$ the current market price of the bond. Then the bond yield
+	$y$ is defined by the equation
+	\begin{equation}
+	P_m(t) = \sum_{i} C_i e^{- y (t_i - t )}
+	\label{eq:bond_yield}
+	\end{equation}
+	\item Par Value: The bond's principal, also known as the face value. 
+	\item Par Yield: The coupon rate that causes the bond price to match 
+	its Par Value.
+	\item Strip(s): Zero coupon bonds that are synthetically created by 
+	selling or buying the coupon of a treasury bond separately from the principal.
+	\item Systematic Risk: The risk related to the market as a whole. This 
+	risk can not be diversified away. Another way to think of this risk 
+	is in terms of correlation. The market components are strongly correlated
+	when the market is going through a bad time.
+	\item Non-systematic Risk: Risk unique to an asset.
+	\item CAPM: Capital Asset Pricing Model. The main argument of the model is that 
+	the return should depend only on systematic risk. There is a simple 
+	equation describing the CAPM model:
+	\begin{equation}
+	E(r_a) = r_f + \beta( r_m - r_f ),
+	\label{eq:capm}
+	\end{equation}
+	where $r_a$ is the return of the asset,
+	$r_m$ is the return of the market, 
+	$r_f$ is the risk free rate and $E(.)$ is 
+	the expectation operator. 
+	
+	\item Local Vol Model: 
+	
+	
+\end{itemize}
+
+\begin{thebibliography}{9}                                                                                                %
+\bibitem {derman_smile}Derman, E. \href{http://www.emanuelderman.com/media/smile-lecture1.pdf}
+{Lectures on Smile, Lecture 01}.
+
+\bibitem {piterbarg2010funding}Piterbarg, V., Funding beyond discounting:collateral agreements and
+derivatives pricing, Asia Risk, March 2010
+
+\bibitem {steele2001stochastic}Steele, M. J., \textit{Stochastic Calculus and Financial Applications}, 
+Springer, 2001
+
+\end{thebibliography}
+\end{document}
