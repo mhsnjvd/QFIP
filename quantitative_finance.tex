@@ -638,23 +638,39 @@ to the performance of the underlying asset.
 
 \end{enumerate}
 
+
 \section{Credit Risk}
 \subsection{Hazard Rate}
-The hazard rate (also called default intensity) is the probability 
-of default for a certain time period \emph{conditional} on no earlier default.
-In general, the hazard rate will be different when different time periods
-are considered. Note that hazard rate is a probability. 
+The hazard rate (also called default intensity) is defined 
+as a number $h$ such that the probability of default in a certain time interval $[t, t+\Delta t]$, \emph{conditional} on no earlier default is given by $h\Delta t$. In general, the hazard rate will be different when different time intervals
+are considered, and in those cases $h(t)$ is defined
+as a time dependant hazard rate.
 
 Let $X$ be the random variable representing the time (in years)
 when the company defaults. For a simple hazard rate model, 
-we assume that 
-$$P( X \leq t ) = 1 - \exp( -h t ),$$ i.e.\
-$X$ is exponentially distributed with $h$ can be though 
-of as the average hazard rate.
+we assume that $h$ is the average hazard rate and the 
+the time to default is an exponentially distributed 
+random variable $X$:
+$$P( X \leq t ) = 1 - \exp( -h t ),$$
+Note that $h$ is playing the same role that 
+the more familiar $\lambda$ plays in a classically
+defined exponential random variable $X$, with pdf:
+$$f_X(x) = \lambda \exp(-\lambda x),$$
+and CDF:
+$$F_X(x) = 1-\exp(-\lambda x)$$
+
 The interpretation of $h$ is given by the equation,
-$$P( t \leq X \leq t + \delta t | X > t ) \approx h \delta t. $$
-In other words, for this model, the hazard rate (i.e.\ probability of default) 
-for a small period $\delta t$ is $h \delta t$
+\begin{align*}
+P( t \leq X \leq t + \Delta t | X > t ) &=\frac{P( t \leq X \leq t + \Delta t \mbox{ and } X > t )}{P(X >t)}\\
+&= \frac{P( t \leq X \leq t + \Delta t)}{P(X >t)}\\
+&= \frac{(1-\exp(-h(t+\Delta t))-(1-\exp(-ht))}{\exp(-ht)}\\
+&= 1 - \exp(-h\Delta t)\\
+& \approx h \Delta t.
+\end{align*}
+
+In other words, for this model, the hazard rate (or the default intensity) determines that the probability of 
+default in a small time interval $\Delta t$ is approximately 
+$h \Delta t$
 
 Note that 
 \begin{enumerate}
@@ -663,6 +679,41 @@ Note that
 	\item The default probabilities backed out of historical data are 
 	real-world default probabilities.
 \end{enumerate}
+
+\subsection{Put-Call Parity for the Merton Model}
+The fundamental balance sheet equation of a firm
+is given by
+$$V(t) = E(t) + D(t),$$
+that is, at any time $t$, the firm's assets $V(t)$ are 
+a sum of the firm's equity $E(t)$ and the firm's 
+liabilities (or Debt)  $D(t)$.
+
+The Merton model shows that the firm's equity is 
+a call option on the firm's assets, expiring at 
+time $T$, having a strike $F$:
+$$E(t) = \max\{V(T)-F,0\} := \left(V(T) - F\right)^{+}.$$
+
+The strike $F$ is implied by the initial value of the 
+debt $D(0)$ and a risky interest rate $k_D$:
+$$F := D(T) = D(0)\exp(k_DT) = D(t)\exp(k_D(T-t))$$.
+
+The put-call parity implies:
+$$V(t) + P(t) - C(t) = F e^{-r(T-t)},$$
+where $r$ is the risk-free rate.
+Since $C(t) = E(t)$, using the balance 
+sheet equation gives $V(t)-C(t)=D(t)$ and 
+substituting this in the put-call parity 
+above gives us:
+$$D(t) + P(t) = F e^{-r(T-t)}.$$
+Now use the value $F = D(t) e^{k_D(T-t)}$:
+\begin{align*}
+D(t) + P(t) &= D(t) e^{k_D(T-t)} e^{-r(T-t)}\\
+P(t) &= D(t)\left(e^{(k_D-r)(T-t)} - 1\right)\\
+\frac{1}{T-t}\ln\left(1+\frac{P(t)}{D(t)}\right) &= k_D-r
+\end{align*}
+which implies that the \emph{credit spread} 
+is 
+$$k_D - r = \frac{1}{T-t}\ln\left(1+\frac{P(t)}{D(t)}\right).$$
 
 \section{Probability and Stochastic Calculus}
 
