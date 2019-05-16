@@ -1069,6 +1069,106 @@ Where can it be used?
 
 \section*{Questions}
 \begin{enumerate}
+\item Let $X, Y$ and $Z$ be random 
+variables. If the correlations between 
+them satisfy the following relationship,
+$$\rho_{XY} = \rho = \rho_{YZ}$$
+what can you say about the correlation
+$\rho_{XZ}$?
+
+Thinking in terms of vectors, let $\alpha$ be 
+the angle between $X$ and $Y$, which must be the 
+same as the angle between $Y$ and $Z$. Then
+$$\cos \alpha = \rho$$,
+
+[TODO]: Draw a picture of $X, Y$ and $Z$.
+If $X$ and $Y$ are orthogonal, i.e., $\rho = 0$, 
+then $Y$ must be normal to the plane 
+formed by $Z$ and $X$. In this case, $\rho_{XZ}$ can 
+by any number between $-1$ and $1$. 
+
+If $X, Y$ are parallel, i.e.\ $\rho = 1$, and 
+$Y, Z$ are parallel, then $X, Z$ must be parallel 
+as well. (Draw three vectors pointing in the 
+same direction). Therefore, $\rho_{XZ} = 1$.
+
+If $X,Y$ are anti-parallel, i.e.\ $\rho = -1$, and 
+$Y, Z$ are anti-parallel, then $X, Z$ must be 
+parallel and again, $\rho_{XZ}=1$.
+
+For the general case, if $X, Y$ make an angle 
+$\alpha$ and $Y, Z$ make an angle $\alpha$, 
+then $X$ and $Z$ can make any angle between 
+$0$ and $2\alpha$. 
+
+Therefore, the range of correlation between 
+$X$ and $Z$ must satisfy
+
+\begin{align*}
+\cos\left(2\alpha\right) &\leq \rho_{XZ} \leq \cos\left( 0 \right),\\
+\implies \cos\left(2 \cos^{-1} \left(\rho\right) \right) & \leq \rho_{XZ} \leq 1.
+\end{align*}
+
+\item Suppose you are trading and you define 
+your hit ratio as the number of trades you have 
+won divided by the total number of trades you 
+participated in.
+You checked your hit ratio in the morning 
+and it was less than $0.9$. You checked later
+in the day and it was larger than $0.9$. Is it the 
+case that at some point during the day, the hit 
+ratio was exactly $0.9$?
+
+Yes. Let $k$ be the number of trades lost out of a total of $n$
+trades. Then, in the morning you had
+$$ \frac{n-k}{n} < 0.9,$$
+which implies 
+$$n < 10k,$$ 
+and similarly, later in the day you had
+$$n > 10k.$$ 
+
+The variable $n$ being discrete must be equal 
+to $10k$ at some intermediate time at which point 
+your hit ratio must be $0.9$.
+
+There is nothing special about $0.9$, the same can 
+be concluded for any hit ratio $r$ as long as $r$ has a 
+specific form. Let
+$$\frac{n-k}{n} = r,$$ which 
+implies,
+$$ n = \frac{1}{1-r} k.$$
+Therefore, as long as $\frac{1}{1-r}$ is an integer,
+the problem structure remains the same. 
+
+Let $\frac{1}{1-r} = j$ where $j \in \mathbb{Z^+}$, then
+the permissible values of $r$ are:
+$$r  = 1 - \frac{1}{j}, \qquad j \in \mathbb{Z^+}.$$
+
+\item Given a data series, $x_1, x_2, \ldots, x_n$, for 
+a large $n$, how do you test if the data is normal? Given 
+another data series, $y_1, y_2, \ldots, y_n$, how do you 
+compare the normality of the two data series with each other, 
+i.e.\ which data series is \emph{more} normal than the other?
+
+
+\item You have a jury of three judges. Two of the judges
+make the correct decision, each with probability $p$, while
+the third judge tosses a fair coin to make the decision. 
+All judges think/toss coins independently. What is the 
+probability that the jury makes the right decision?
+
+Let $C$ be the event that the jury makes the correction decision. 
+Then, conditioning on whether the judge with the coin
+makes the correct decision  ($j_3$), we have
+
+$$P(C) = P(C|j_3) P(j_3)+P(C|\neg j_3)P(\neg j_3).$$
+
+This boils down to
+$$P(C) = \frac{1}{2}\left(1-(1-p)^2\right) + \frac{1}{2} p^2 = p.$$
+
+Thanks to the coin tossing, a three person jury has 
+effectively been reduced to a one person jury. 
+
 \item Estimate the derivative of $x^x$ at $x=2$.
 
 We have:
