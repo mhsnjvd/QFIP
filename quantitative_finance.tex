@@ -232,18 +232,20 @@ what he had as a deposit. The bookmaker has no interest
 in the outcome of the race!
 
 
-\section*{Price of a European call option}
+\section*{Price of a European options}
+The price of a European call option is 
+given by the equation:
 \begin{equation}
-C = S \mathcal{N} (d_1) - e^{-r(T-t)} K \mathcal{N} (d_2),
+C(t) = S(t) \mathcal{N} (d_1) - e^{-r(T-t)} K \mathcal{N} (d_2),
 \end{equation}
 where $\mathcal{N}$ is the standard normal 
 cumulative distribution function, while
 \begin{equation}
-d_1 = \frac{\ln(S/K) + (r+\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}, \qquad 
-d_2 = \frac{\ln(S/K) + (r-\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}.
+d_1 = \frac{\ln\left(S(t)/K\right) + (r+\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}, \qquad 
+d_2 = \frac{\ln\left((S(t)/K\right) + (r-\sigma^2/2)(T-t)}{\sigma \sqrt{T-t}}.
 \end{equation}
 
-Note that as $t \to T$, $C \to S - K$. 
+Note that as $t \to T$, $C_t \to S_T - K$. 
 
 Also useful is the relationship
 \begin{equation}
@@ -253,8 +255,13 @@ d_2 = d_1 - \sigma \sqrt{T-t}.
 A more intuitive way to think about $d_1$ and 
 $d_2$ is by rewriting them as
 \begin{equation}
-d_1 = \frac{\ln(\frac{S e^{r(T-t)}}{K}) + \frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}, \qquad 
-d_2 = \frac{\ln(\frac{S e^{r(T-t)}}{K}) - \frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}.
+d_1 = \frac{\ln\left(\frac{S(t) e^{r(T-t)}}{K}\right) + 
+\frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}, \qquad 
+d_2 = \frac{\ln\left(\frac{S(t) e^{r(T-t)}}{K}\right) - \frac{\sigma^2}{2}(T-t)}{\sigma \sqrt{T-t}}.
+\end{equation}
+The price of a European put option is given by:
+\begin{equation}
+P(t) = -S(t) \mathcal{N} (-d_1) + e^{-r(T-t)} K \mathcal{N} (-d_2),
 \end{equation}
 \section*{The put--call parity}
 For European options, the put--call
@@ -1079,7 +1086,7 @@ $\rho_{XZ}$?
 Thinking in terms of vectors, let $\alpha$ be 
 the angle between $X$ and $Y$, which must be the 
 same as the angle between $Y$ and $Z$. Then
-$$\cos \alpha = \rho$$,
+$$\cos \alpha = \rho,$$
 
 [TODO]: Draw a picture of $X, Y$ and $Z$.
 If $X$ and $Y$ are orthogonal, i.e., $\rho = 0$, 
@@ -1094,12 +1101,13 @@ same direction). Therefore, $\rho_{XZ} = 1$.
 
 If $X,Y$ are anti-parallel, i.e.\ $\rho = -1$, and 
 $Y, Z$ are anti-parallel, then $X, Z$ must be 
-parallel and again, $\rho_{XZ}=1$.
+parallel and therefore, $\rho_{XZ}=1$.
 
-For the general case, if $X, Y$ make an angle 
-$\alpha$ and $Y, Z$ make an angle $\alpha$, 
-then $X$ and $Z$ can make any angle between 
-$0$ and $2\alpha$. 
+For the general case, if $X$ and $Y$ make an angle 
+$\alpha$ between each other and $Y$ and $Z$ make the 
+same angle $\alpha$ between each other, 
+then the angle between $X$ and $Z$ can be between 
+$0$ and $2\alpha$.[TODO: Draw cones]
 
 Therefore, the range of correlation between 
 $X$ and $Z$ must satisfy
@@ -1110,7 +1118,7 @@ $X$ and $Z$ must satisfy
 \end{align*}
 
 \item Suppose you are trading and you define 
-your hit ratio as the number of trades you have 
+your \emph{hit ratio} as the number of trades you have 
 won divided by the total number of trades you 
 participated in.
 You checked your hit ratio in the morning 
@@ -1119,15 +1127,18 @@ in the day and it was larger than $0.9$. Is it the
 case that at some point during the day, the hit 
 ratio was exactly $0.9$?
 
-Yes. Let $k$ be the number of trades lost out of a total of $n$
+Yes. Let $k_1$ be the number of trades lost out of a total of $n_1$
 trades. Then, in the morning you had
-$$ \frac{n-k}{n} < 0.9,$$
+$$ \frac{n_1-k_1}{n_1} < 0.9,$$
 which implies 
-$$n < 10k,$$ 
+$$n_1 < 10k_1,$$ 
 and similarly, later in the day you had
-$$n > 10k.$$ 
+$$ \frac{n_2-k_2}{n_2} > 0.9,$$
+$$n_2 > 10k_2.$$ 
+where $n_2 \geq n_1$ and $k_2\geq k_1$.
 
-The variable $n$ being discrete must be equal 
+
+The variables $n_1 \leq n_2$ being discrete must be equal 
 to $10k$ at some intermediate time at which point 
 your hit ratio must be $0.9$.
 
