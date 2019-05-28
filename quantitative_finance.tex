@@ -231,6 +231,135 @@ In both cases the bookmaker has to pay $x+y$, which is exactly
 what he had as a deposit. The bookmaker has no interest 
 in the outcome of the race!
 
+\section*{Risk Neutral Probability}
+Risk neutral probability of a financial
+contract should be called \emph{market price probability}, 
+i.e.\ the probability inferred from the price 
+that the market is willing to pay for the contract.
+
+Let $B$ be a binary contract, which 
+pays \$1 at time $T$ if an event $E$ occurs and 
+nothing if $E$ doesn't occur. Then the 
+risk neutral probability of $E$ 
+is:
+
+$$
+P(E) = \frac{\mbox{Price(Contract paying \$1 at time $T$ if $E$ occurs)}}
+{\mbox{Price(Contract paying \$1 dollar at time $T$ no matter what)}}.
+$$
+
+\subsection*{Risk Neutral Price of a Stock}
+Let us assume that the price of a stock 
+follows geometric Brownian motion, and the 
+price of the stock at time $t$ is $S(t)$.
+
+The stochastic differential equation followed
+by the stock price is given by
+\begin{equation*}
+\frac{dS(t)}{S(t)} = \mu dt + \sigma dW_t,
+\end{equation*}
+where $W_t \sim N(0, t)$. 
+
+Using Ito's formula we can solve the above 
+SDE and show that for $u>t$,
+\begin{equation*}
+S(u) = S(t)\exp\left((\mu - \frac{1}{2}\sigma^2)(u-t)+\sigma\sqrt{(u-t)}Z\right).
+\end{equation*}
+
+We can write the log-normal 
+random variable $S$ as
+\begin{equation}
+\label{eq:lognormal}
+S=e^{X},
+\end{equation}
+where $X(u)$ is normally
+distributed:
+\begin{equation}
+X(u) \sim \mathcal{N}\left(\ln S(t) + \left(\mu - \frac{1}{2}\sigma^2\right)(u-t), \sigma^2(u-t)\right).
+\end{equation}
+
+In the Black-Scholes world, we obtain the result 
+$\mu = r$. However, a lot of people find this result puzzling.
+How does $\mu$ get completely eliminated in the final formula 
+for derivative pricing? We try to explain this by applying the 
+basic principle of rsisk neutral pricing on the most basic if all 
+securities, the stock itself. 
+
+Let $\mathbb{Q}$ be the risk neutral measure, then 
+by the fundamental theorem of asset pricing, the stock 
+price at time $t$ is the expected value of the stock at any future
+time $T>t$, discounted back to time $t$: 
+\begin{equation*}
+S(t) = E^{\mathbb{Q}}[S(T)]e^{-r(T-t)}.
+\end{equation*}
+Using \ref{eq:lognormal}, we can write the above as
+\begin{align*}
+S(t) &= E^{\mathbb{Q}}[e^{X(T)}]e^{-r(T-t)}\\
+S(t) &= e^{\ln S(t) + \left(\mu - \frac{1}{2}\sigma^2\right) (T-t) + \frac{\sigma^{2}(T-t)}{2}}
+e^{-r(T-t)}\\
+S(t) &= S(t) e^{(\mu-r)(T-t)}\\
+1 &= e^{(\mu-r)(T-t)},
+\end{align*}
+and since $T-t \neq 0$, the last equation implies,
+\begin{equation*}
+\mu = r.
+\end{equation*}
+The insight is that the special form of the SDE and its solution coupled 
+with the no arbitrage asset pricing theorem forces the remarkable
+equality of $\mu$ and $r$. 
+
+Note that to help with the computation of $E^{\mathbb{Q}}[e^{X}]$, 
+we can make use of the moment generating function $\phi_X$ of a
+normal random variable $X$ with mean $m$ and 
+variance $v^2$:
+\begin{equation*}
+\phi_{X}(s) = E[e^{sX}] = e^{ms+\frac{v^2s^2}{2}}.
+\end{equation*} 
+Evaluating $\phi_X$ at $s=1$, we get the special result,
+\begin{equation*}
+\phi_{X}(1) = E[e^{X}] = e^{m+\frac{v^2}{2}}.
+\end{equation*}
+In particular, the above identity expresses the 
+mean value of the log-normal random variable $S=e^{X}$ 
+in terms of the mean and variance of its underlying normal 
+variable $X$. 
+
+\subsection*{Price of a Binary Option}
+What is the price of a binary option at time 
+$t$, which pays \$$1$ at time $T > t$ if , $S(T) > K$ and
+nothing otherwise?
+
+Let $B(t)$ be the price of the binary option 
+at time $t$. We have,
+\begin{align*}
+B(t) &= E^{\mathbb{Q}}[I\left(S(T)\geq K\right)]e^{-r(T-t)}\\
+&= E^{\mathbb{Q}}[I\left(e^{X(T)}\geq K\right)]e^{-r(T-t)}\\
+&= E^{\mathbb{Q}}[I\left(X(T)\geq \ln K\right)]e^{-r(T-t)}\\
+&= \frac{e^{-r(T-t)}}{\sqrt{2\pi \sigma^2 (T-t)}} \int_{\ln K}^{\infty} e^{-\frac{\left(x-m\right)^2}{2\sigma^2(T-t)}} dx\\
+&= \frac{e^{-r(T-t)}}{\sqrt{2\pi}} \int_{-\frac{\ln \frac{S(t)}{K} + (r-\frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{(T-t)}}}^{\infty} e^\frac{-z^2}{2} dz\\
+&= e^{-r(T-t)} \mathcal{N}(d_2),
+\end{align*}
+where 
+\begin{equation*}
+d_2 = \frac{\ln \frac{S(t)}{K} + (r-\frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{(T-t)}}.
+\end{equation*}
+
+What is the risk neutral probability that the stock
+$S$ at time $t$ is greater than or equal to the strike price $K$? $N(d_2)$.
+
+\begin{equation*}
+\mbox{Digital Call:} \qquad P^{\mathbb{Q}}(S(T) \geq K) = \mathcal{N}(d_2).
+\end{equation*}
+Similarly,
+\begin{equation*}
+\mbox{Digital Put:} \qquad P^{\mathbb{Q}}(S(T) \leq K) = 1-\mathcal{N}(d_2)=\mathcal{N}(-d_2).
+\end{equation*}
+
+\begin{equation}
+\mbox{Digital Call + Digital Put = Riskless Bond}
+\end{equation}
+
+
 
 \section*{Price of a European options}
 The price of a European call option is 
@@ -731,12 +860,12 @@ on $\Omega$ and $\mathcal{P}: \mathcal{F} \to [0, 1]$,
 such that 
 \begin{enumerate}
 	\item $P(\Omega)$ = 1
-	\item For any countable, mutually disjoint sets in $\mathcal{F}$, the function $\mathcal{P}$
-	is additive.
+	\item For any countable union of mutually disjoint sets in $\mathcal{F}$, the 
+	function $\mathcal{P}$ is additive.
 \end{enumerate}
 \end{definition}
-\begin{definition}[Measure]
-The function $\mathcal{P}$ above is called a measure.
+\begin{definition}[Probability Measure]
+The function $\mathcal{P}$ above is called a probability measure.
 \end{definition}
 
 \subsection*{Brownian Motion}
@@ -749,6 +878,24 @@ independent of $B(t_1)$ and normal with zero mean and
 variance $t_2-t_1$. 
 \item $B(t)$ is continuous almost surely.
 \end{enumerate}
+
+\subsection*{Stopping Time}
+Intuitively speaking, a stopping time 
+is the time at which 
+a stochastic process satisfies a 
+certain rule. However, for a stopping time, the 
+rule must be defined in a way that at any given time
+it may be tested by looking at
+only the past and present values of the 
+stochastic process. 
+For example: buy Microsoft as 
+soon as the stock price goes below \$100 is a valid
+rule for a stopping time. On the other hand: sell 
+Microsoft first thing in the morning if the average price
+through out that day is less than \$50 per share
+is not a stopping time, since in the morning we can not 
+tell what average will be attained at the end of 
+the day. 
 
 Let $\tau_m := \inf \{ t: B(t) = m \}$, i.e.\
 $\tau_m$ is the time (a random variable)
