@@ -232,14 +232,17 @@ what he had as a deposit. The bookmaker has no interest
 in the outcome of the race!
 
 \section*{Risk Neutral Probability}
-Risk neutral probability of a financial
-contract should be called \emph{market price probability}, 
+The Risk neutral probability of a certain
+event, where the event is described by a financial
+contract, can be thought of as the 
+\emph{market price probability}, 
 i.e.\ the probability inferred from the price 
-that the market is willing to pay for the contract.
+that the market is willing to pay for 
+that contract.
 
 Let $B$ be a binary contract, which 
 pays \$1 at time $T$ if an event $E$ occurs and 
-nothing if $E$ doesn't occur. Then the 
+nothing if $E$ does not occur, then the 
 risk neutral probability of $E$ 
 is:
 
@@ -249,11 +252,9 @@ P(E) = \frac{\mbox{Price(Contract paying \$1 at time $T$ if $E$ occurs)}}
 $$
 
 \subsection*{Risk Neutral Price of a Stock}
-Let us assume that the price of a stock 
-follows geometric Brownian motion, and the 
-price of the stock at time $t$ is $S(t)$.
-
-The stochastic differential equation followed
+Let us assume that the price $S(t)$ of a stock 
+follows geometric Brownian motion. The stochastic 
+differential equation (SDE) followed
 by the stock price is given by
 \begin{equation*}
 \frac{dS(t)}{S(t)} = \mu dt + \sigma dW_t,
@@ -263,7 +264,7 @@ where $W_t \sim N(0, t)$.
 Using Ito's formula we can solve the above 
 SDE and show that for $u>t$,
 \begin{equation*}
-S(u) = S(t)\exp\left((\mu - \frac{1}{2}\sigma^2)(u-t)+\sigma\sqrt{(u-t)}Z\right).
+S(u) = S(t)\exp\left((\mu - \frac{1}{2}\sigma^2)(u-t)+\sigma W_{u-t}\right).
 \end{equation*}
 
 We can write the log-normal 
@@ -345,7 +346,8 @@ d_2 = \frac{\ln \frac{S(t)}{K} + (r-\frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{(T-
 \end{equation*}
 
 What is the risk neutral probability that the stock
-$S$ at time $t$ is greater than or equal to the strike price $K$? $N(d_2)$.
+$S$ at time $T>t$ is greater than or equal to the strike price $K$? 
+$\mathcal{N}(d_2)$.
 
 \begin{equation*}
 \mbox{Digital Call:} \qquad P^{\mathbb{Q}}(S(T) \geq K) = \mathcal{N}(d_2).
@@ -697,7 +699,7 @@ In either case, the correlation skew is hurting us.
 Hence, if we are buying a WO put, we should
 charge extra for the correlation skew.
 \subsection{Convexity}
-$9 = 5^2-4^2 > 4^2 - 3^2 = 7$ and this is called convexity.
+$9 = 5^2 - 4^2 > 4^2 - 3^2 = 7$ and this is called convexity.
 If you are long a convex payoff, you make more money 
 on the up move than you would lose on a down move of equal magnitude.
 
@@ -1235,6 +1237,10 @@ the angle between $X$ and $Y$, which must be the
 same as the angle between $Y$ and $Z$. Then
 $$\cos \alpha = \rho,$$
 
+[TODO]: This can be done through looking at
+the positive semi-definite property of the correlation matrix as 
+well.
+
 [TODO]: Draw a picture of $X, Y$ and $Z$.
 If $X$ and $Y$ are orthogonal, i.e., $\rho = 0$, 
 then $Y$ must be normal to the plane 
@@ -1308,7 +1314,6 @@ another data series, $y_1, y_2, \ldots, y_n$, how do you
 compare the normality of the two data series with each other, 
 i.e.\ which data series is \emph{more} normal than the other?
 
-
 \item You have a jury of three judges. Two of the judges
 make the correct decision, each with probability $p$, while
 the third judge tosses a fair coin to make the decision. 
@@ -1326,6 +1331,31 @@ $$P(C) = \frac{1}{2}\left(1-(1-p)^2\right) + \frac{1}{2} p^2 = p.$$
 
 Thanks to the coin tossing, a three person jury has 
 effectively been reduced to a one person jury. 
+
+
+\item What is the relationship of $\mathrm{Var}(\mathrm{E}(X\mid Y))$ with
+$\mathrm{E}(\mathrm{var}(X\mid Y))$?
+
+The law of total variance:
+$$\mathrm{Var}(Y)=\mathrm{E}[\mathrm{Var}(Y\mid X)]+
+\mathrm{Var}(\mathrm{E}[Y\mid X]).$$
+
+\item Find the value of $\alpha$ which minimizes,
+\begin{equation*}
+\sum_{i}^{n} \left|\alpha w_i - n_i\right|,
+\end{equation*}
+where $w_i$ and $n_i$ are positive real numbers.
+
+Notice that $\alpha w_i - n_i$ has a zero at $\frac{n_i}{w_i}$. 
+Define 
+\begin{equation*}
+a := \min \left\{ \frac{n_i}{w_i}: i = 1, 2, \ldots, n \right\},
+\end{equation*}
+
+and 
+$$b := \max \left\{ \frac{n_i}{w_i}: i = 1, 2, \ldots, n \right\}.$$
+
+Now apply a bisection on the interval $[a, b]$.
 
 \item Estimate the derivative of $x^x$ at $x=2$.
 
