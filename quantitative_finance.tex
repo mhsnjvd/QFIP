@@ -142,6 +142,22 @@ That is,
 \frac{\mu-r}{\sigma} := \lambda
 \end{equation}
 
+\section{Black Scholes Equation with Replication}
+\begin{align*}
+\Pi  &= C - \Delta S\\
+d\Pi &= dC - \Delta dS\\
+r \Pi dt &= \frac{\partial C}{\partial t} dt + \frac{\partial C}{\partial S} dS + 
+\frac{1}{2} \frac{\partial^2 C}{\partial S^2}dS^2 - \Delta dS\\
+r(C-\Delta S)dt &= \frac{\partial C}{\partial t} dt + \left(\frac{\partial C}{\partial S} - \Delta \right)dS
++\frac{1}{2} \sigma^2 S^2 \frac{\partial^2 C}{\partial S^2}dt
+\end{align*}
+Now let $\Delta = \frac{\partial C}{\partial S}$, and we get
+the Black Scholes PDE by cancelling out $dt$ on both sides:
+\begin{equation}
+r\left(C-S \frac{\partial C}{\partial S}\right) = \frac{\partial C}{\partial t} +
+\frac{1}{2} \sigma^2 S^2 \frac{\partial^2 C}{\partial S^2}
+\end{equation}
+
 
 \section{Black Scholes Equation in terms of Greeks}
 An easy way to intuitively think of the Black Scholes
