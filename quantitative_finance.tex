@@ -143,8 +143,15 @@ That is,
 \end{equation}
 
 \section{Black Scholes Equation with Replication}
+At time $t$, a portfolio $\Pi$ is formed
+by selling a call option for price $C$, which 
+is delta hedged by buying $\Delta$ of 
+the underling stock, at a cost of $\Delta S$:
 \begin{align*}
-\Pi  &= C - \Delta S\\
+\Pi  &= C - \Delta S.
+\end{align*}
+At time $t + dt$, we have by Ito's formula:
+\begin{align*}
 d\Pi &= dC - \Delta dS\\
 r \Pi dt &= \frac{\partial C}{\partial t} dt + \frac{\partial C}{\partial S} dS + 
 \frac{1}{2} \frac{\partial^2 C}{\partial S^2}dS^2 - \Delta dS\\
@@ -342,12 +349,12 @@ in terms of the mean and variance of its underlying normal
 variable $X$. 
 
 \subsection*{Price of a Binary Option}
-What is the price of a binary option at time 
-$t$, which pays \$$1$ at time $T > t$ if , $S(T) > K$ and
+What is the price of a European binary option 
+which pays \$$1$ if $S(T) > K$ and
 nothing otherwise?
 
 Let $B(t)$ be the price of the binary option 
-at time $t$. We have,
+at time $t < T$. We have,
 \begin{align*}
 B(t) &= E^{\mathbb{Q}}[I\left(S(T)\geq K\right)]e^{-r(T-t)}\\
 &= E^{\mathbb{Q}}[I\left(e^{X(T)}\geq K\right)]e^{-r(T-t)}\\
