@@ -1124,6 +1124,84 @@ The collection of theorems that tell us how to make
 drift disappear is commonly called Girsanov theory
 \cite[Ch.\ 13]{steele2001stochastic}.
 
+\section{Portfolio Theory}
+Suppose we have a universe of 
+$n$ assets, described by a $n$-random vector 
+$A =[a_1, a_2, \ldots, a_n]^T$.
+
+We assume that their mean vector is given by 
+\begin{align*}
+\mu = 
+\begin{bmatrix}
+\mu_1\\
+\mu_2\\
+\vdots\\
+\mu_n
+\end{bmatrix},
+\end{align*}
+while the covariance matrix is given by
+\begin{align*}
+\Sigma = \begin{bmatrix}
+\sigma_1^2  & \sigma_{12} & \cdots & \sigma_{1n}\\
+\sigma_{12} & \sigma_2^2  & \cdots & \sigma_{2n}\\
+\vdots      & \vdots      & \vdots & \vdots \\
+\cdots      & \cdots      & \sigma_{ij} & \cdots \\
+\vdots      & \vdots      & \vdots & \vdots \\
+\sigma_{1n} & \sigma_{2n} & \cdots & \sigma_n^2\\
+\end{bmatrix}.
+\end{align*}
+
+Note that $\sigma_{ij} = \rho_{ij} \sigma_i \sigma_j$.
+
+\subsection*{Minimum Variance Portfolio}
+Our portfolio $P$ is a linear combination of 
+assets:
+\begin{align*}
+P = w \cdot a,
+\end{align*}
+where $w = [w_1, w_2, \ldots, w_n]^T$ is a weight 
+vector such that \
+\begin{align*}
+w \cdot {\bf 1} = \sum_{i=1}^{n} w_1 + w_2 + \cdots + w_n = 1.
+\end{align*}
+
+However, we want to choose the weight vector 
+$w$ which minimizes the variance of our 
+portfolio.
+
+Recall that in general for a matrix $A$ and a random vector $X$, 
+$\mathrm{Var}(AX) = A\Sigma A^T$.
+Therefore,
+\begin{align*}
+\mathrm{Var}(P) = \mathrm{Var}(w^T a) = w^T\Sigma w.
+\end{align*}
+
+We have the following standard minimization problem:
+\begin{align*}
+\textrm{minimize: }   ~ & \frac{1}{2} w^T\Sigma w,\\
+\textrm{subject to: } ~ & w \cdot {\bf 1} = 1.
+\end{align*}
+
+The associated Lagrangian is given by,
+
+\begin{align*}
+L(w, \lambda) = \frac{1}{2} w^T\Sigma w - \lambda ( w \cdot {\bf 1} - 1 ).
+\end{align*}
+
+Differentiating with respect to $w$ and setting the result to zero gives,
+\begin{align*}
+\Sigma w - \lambda {\bf 1} & = 0,\\
+w^* &= \lambda \Sigma^{-1} {\bf 1}.
+\end{align*}
+
+Since $w^*$ should satisfy the constraint as well,
+\begin{align*}
+w^* \cdot {\bf 1} &= 1,\\
+\lambda {\bf 1}^T \Sigma^{-1} {\bf 1} &= 1,\\
+\lambda &=\frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+w^* &=\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+\end{align*}
+
 
 \section{Matrices}
 Given a square $n \times n$ matrix $A$, we can find the $LU$ decomposition 
@@ -1248,6 +1326,20 @@ Where can it be used?
 
 \section*{Questions}
 \begin{enumerate}
+\item We are given an array of integers starting 
+from $0$ and ending at $100$. We start from $0$ and 
+start flipping a fair coin. If a heads come down, 
+we advance by $1$ and if a tail comes down 
+we advance by $2$. For example, if head comes down, we move
+to index $1$, otherwise, we skip $1$ and move to index $2$. 
+We continue flipping the coin until we 
+reach hundred or beyond. 
+
+The question is, which index in the array has the 
+largest probability of being visited?  
+
+
+ 
 \item Let $X, Y$ and $Z$ be random 
 variables. If the correlations between 
 them satisfy the following relationship,
