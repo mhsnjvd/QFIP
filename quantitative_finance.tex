@@ -1183,14 +1183,17 @@ We have the following standard minimization problem:
 \end{align*}
 
 The associated Lagrangian is given by,
-
 \begin{align*}
 L(w, \lambda) = \frac{1}{2} w^T\Sigma w - \lambda ( w \cdot {\bf 1} - 1 ).
 \end{align*}
 
 Differentiating with respect to $w$ and setting the result to zero gives,
 \begin{align*}
-\Sigma w - \lambda {\bf 1} & = 0,\\
+\Sigma w - \lambda {\bf 1} & = 0,
+\end{align*}
+which implies that the best weights vector
+$w^*$ is given by,
+\begin{align*}
 w^* &= \lambda \Sigma^{-1} {\bf 1}.
 \end{align*}
 
@@ -1199,10 +1202,249 @@ Since $w^*$ should satisfy the constraint as well,
 w^* \cdot {\bf 1} &= 1,\\
 \lambda {\bf 1}^T \Sigma^{-1} {\bf 1} &= 1,\\
 \lambda &=\frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
-w^* &=\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+w^* &=\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}.
+\end{align*}
+
+The minimum variance is given by,
+\begin{align*}
+\sigma_{min}^2 &= w^{*T} \Sigma w,\\
+&= \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
+\Sigma \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right),\\
+&=  \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
+\frac{{\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+&= \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
+\frac{({\bf 1}^T)^T}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+&= \left(\frac{{\bf 1}^T \Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
+\frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
+&= \frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}} = \lambda.
+\end{align*}
+
+\section*{Linear Regression}
+We assume that the output $Y$ is a
+random variable and related to the input
+$X$ through a regression function
+\begin{align*}
+Y = r(X).
+\end{align*}
+
+Linear regression assumes that the best estimate 
+of $Y$, given $X$ is the expected value of $Y$ where this 
+expectation is driven by a function linear in $X$:
+\begin{align*}
+\mathrm{E}[Y|X=x] = X\beta + \epsilon.
+\end{align*}
+
+The simplest case of linear regression is when 
+we assume that both $X$ and $Y$ are one dimensional
+real random variables and we have a set of 
+discrete observations,
+\begin{align*}
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i,
+\end{align*}
+such that $\mathrm{E}[\epsilon_i|X] = 0$ and 
+$\mathrm{Var}[\epsilon_i|X] = \sigma^2$.
+
+In matrix notation, we can write the above as,
+\begin{align*}
+y = \begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix} + \epsilon,
+\end{align*}
+where $x, y$ and $\epsilon$ are vectors in $\mathbb{R}^n$ and 
+${\bf 1}$ is a $n$-vector of all ones.
+
+\begin{align*}
+\begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}^T
+y &= 
+\begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}^T
+\begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix} + 
+\begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}^T\epsilon,
+\end{align*}
+or,
+\begin{align*}
+\begin{bmatrix}
+{\bf 1}^T\\
+x^T
+\end{bmatrix}
+y &= 
+\begin{bmatrix}
+{\bf 1}^T\\
+x^T
+\end{bmatrix}
+\begin{bmatrix}
+{\bf 1} & x
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix} + 
+\begin{bmatrix}
+{\bf 1}^T\\
+x^T
+\end{bmatrix}\epsilon.
+\end{align*}
+
+This gives,
+\begin{align*}
+\begin{bmatrix}
+{\bf 1}^Ty\\
+x^Ty
+\end{bmatrix}
+&= 
+\begin{bmatrix}
+{\bf 1}^T{\bf 1} & {\bf 1}^Tx\\
+{\bf 1}^Tx & x^Tx
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix} + 
+\begin{bmatrix}
+{\bf 1}^T \epsilon\\
+x^T\epsilon
+\end{bmatrix}.
+\end{align*}
+
+Let's put hats on $\beta_0$ and 
+$\beta_1$, as we are going to drop the 
+terms involving $\epsilon$ and apply 
+Cramer's rule to solve the system.
+
+\begin{align*}
+\hat{\beta_0} &= \frac{
+\left|
+\begin{matrix}
+{\bf 1}^Ty & {\bf 1}^Tx\\
+x^Ty & x^Tx
+\end{matrix}
+\right|}
+{
+\left|
+\begin{matrix}
+{\bf 1}^T{\bf 1} & {\bf 1}^Tx\\
+{\bf 1}^Tx & x^Tx
+\end{matrix}
+\right|}\\
+&=\frac{\sum{x_i^2}\sum{y_i}-\sum{x_i}\sum{x_i y_i}}{n\sum{x_i^2}-\sum{x_i}\sum{x_i}}
+\end{align*}
+
+\begin{align*}
+\hat{\beta_1} &= \frac{
+\left|
+\begin{matrix}
+{\bf 1}^T{\bf 1} & {\bf 1}^Ty\\
+{\bf 1}^Tx & x^Ty
+\end{matrix}
+\right|}
+{
+\left|
+\begin{matrix}
+{\bf 1}^T{\bf 1} & {\bf 1}^Tx\\
+{\bf 1}^Tx & x^Tx
+\end{matrix}
+\right|}\\ 
+& = \frac{n \sum{x_i y_i} - \sum{x_i}\sum{y_i}}
+{n\sum{x_i^2}-\sum{x_i}\sum{x_i}}\\
+& = \frac{ \frac{1}{n}\sum{x_i y_i} - 
+\left(\frac{1}{n}\sum{x_i}\right)\left(\frac{1}{n}\sum{y_i}\right)}
+{\frac{1}{n}\sum{x_i^2}-
+\left(\frac{1}{n}\sum{x_i}\right)\left(\frac{1}{n}\sum{x_i}\right)}\\
+& = \frac{\mathrm{Cov}(x, y)}{\mathrm{Cov}(x, x)}\\
+& = \rho \frac{\sigma_y}{\sigma_x}
+\end{align*}
+
+Here is the key idea to remember, the slope of the regression line $\beta_1$ 
+is estimated by dividing the sample covariance $\mathrm{Cov}(x,y)$ with the 
+sample covariance $\mathrm{Cov}(x, x)$.
+
+Notice that the explicit solution of $\beta_0$ above does not 
+have a clear interpretation. However, given we first solve for 
+$beta_1$, we can find $beta_0$ by,
+
+\begin{align*}
+\beta_0 = 
+\end{align*}
+
+\section{Statistics}
+
+\subsection{The trio: $Z$-$\chi^2$-$t$}
+\subsubsection{$Z$}
+This is just the central limit theorem. If 
+$X_1, X_2, \ldots, X_n$ are i.i.d., with the 
+mean and variance of each being $\mu$ and 
+$\sigma^2$, respectively, then,
+\begin{align*}
+\lim_{n \to \infty} \frac{\overline{X}_n-\mu}{\frac{\sigma}{\sqrt{n}}} = Z,
+\end{align*}
+where $Z$ is a standard normal. 
+\subsubsection{$\chi^2$}
+If $Z_1, Z_2, \ldots, Z_n$ are independent standard normals,
+then, 
+\begin{align*}
+\chi^2(n) = \sum_{i}^{n} Z_i ^2,
+\end{align*}
+has a chi-square distribution with $n$ degrees of freedom.
+
+\subsubsection{$t$}
+Let $Z$ and $Z_1, Z_2, \ldots, Z_n$, be independent
+standard normals, then
+\begin{align*}
+t = \frac{Z}{\sqrt{\frac{\sum_{i=1}^{n} Z_i ^2}{n}}}
+= \frac{Z}{\sqrt{\frac{\chi(n)^2}{n}}},
+\end{align*}
+has a $t$-distribution. 
+
+\subsection{Hypothesis testing}
+Type-I error is the error of 
+rejecting a null hypothesis when it 
+is in fact true. The probability of this error
+is usually denoted by $\alpha$. A typical 
+value of $\alpha$ used in practice is 
+$.05$.
+
+\subsection{The Law of Total Expectation}
+\begin{align*}
+\mathrm{E}(X) = \mathrm{E}_y(\mathrm{E}_x(X|Y)))
+\end{align*}
+
+\subsection{The Law of Total Variance}
+\begin{align*}
+\mathrm{Var}(X) = \mathrm{Var}(\mathrm{E}(X|Z))+
+\mathrm{E}(\mathrm{Var}(X|Z)) 
+\end{align*}
+
+\begin{proof}
+By definition,
+\begin{align*}
+\mathrm{Var}(X|Z) = \mathrm{E}(X^2|Z) - \mathrm{E}(X|Z)^2.
+\end{align*}
+Taking expectation w.r.t $Z$, we get,
+\begin{align*}
+\mathrm{E}(\mathrm{Var}(X|Z)) &= \mathrm{E}(\mathrm{E}(X^2|Z)) - \mathrm{E}(\mathrm{E}(X|Z)^2)\\
+&= \mathrm{E}(X^2) - \mathrm{E}(\mathrm{E}(X|Z)^2)\\
+&= \mathrm{E}(X^2) - \mathrm{E}(X)^2 - \left(\mathrm{E}(\mathrm{E}(X|Z)^2)-\mathrm{E}(X)^2\right)\\
+&= \mathrm{Var}(X) - \left(\mathrm{E}(\mathrm{E}(X|Z)^2)-\mathrm{E}(\mathrm{E}(X|Z))^2\right)\\
+&= \mathrm{Var}(X) - \mathrm{Var}(\mathrm{E}(X|Z)).
 \end{align*}
 
 
+\end{proof}
 \section{Matrices}
 Given a square $n \times n$ matrix $A$, we can find the $LU$ decomposition 
 of $A$ such that 
@@ -1226,6 +1468,33 @@ which introduces zeros in the $i^{th}$ column
 below the diagonal. 
 
 If $A$ is Hermitian and semi-positive definite
+\subsection{Orthogonally Diagonalizable Matrices}
+An orthogonally diagonalizable matrix is called
+a \emph{Normal} matrix. 
+\begin{align*}
+A \text{ is normal } \Leftrightarrow A = Q\Lambda Q^*,
+\end{align*}
+where $Q$ is orthogonal and $\Lambda$ is diagonal.
+
+A normal matrix commutes with its complex conjugate, and 
+this property also characterizes a normal matrix.
+\begin{align*}
+A \text{ is normal } \Leftrightarrow A^*A = AA^*.
+\end{align*}
+
+\begin{center}
+\begin{tabular}{ |p{3cm}|p{3cm}| }
+ \hline
+ \multicolumn{2}{|c|}{ Orthogonally Diagonalizable Matrices }\\
+ \hline
+ Complex & Real \\
+ \hline
+ Unitary  & Orthogonal\\
+ Hermitian & Symmetric\\
+ Skew-Hermitian & Skew-Symmetric \\
+ \hline
+\end{tabular}
+\end{center}
 
 \subsection{Cholseky Decomposition in Finance}
 The fundamental use of Cholesky decomposition 
@@ -1312,6 +1581,29 @@ gives us the required correlated vector $x$:
 \right]
 \label{}
 \end{equation}.
+\subsection*{Perturbation of the Identity Matrix}
+\begin{align*}
+\left(I + uv^T\right)^{-1} = I - \frac{uv^T}{1 - u^Tv}.
+\end{align*}
+
+\subsection*{Projection Matrices}
+A square matrix $P$ such that $P^2=P$ is called
+a projection matrix. 
+
+A typical example of a projection matrix is the 
+rank-1 matrix,
+\begin{align*}
+\frac{aa^T}{a^Ta},
+\end{align*}
+where $a$ is a vector in $\mathbb{R}^n$. This matrix projects
+any vector onto the vector $a$. 
+
+The outer product of $u$ and $v$, defined as $uv^T$, is a rank-$1$  matrix.
+The eigenvectors of $uv^T$ are 
+all vectors orthogonal to $v$ (with eigenvalue $0$) and the 
+vector $u$ (with eigenvalue $v^Tu$).
+
+
 
 \section{Using Chebyshev Methods}
 \begin{enumerate}
