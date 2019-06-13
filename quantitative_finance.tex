@@ -1006,6 +1006,43 @@ with respect to $t$:
 \begin{equation}
 f_{\tau_m} (t) = 
 \end{equation}
+\subsection{Copula}
+A copula is a distribution function $C: \mathbb{R}^n \to [0, 1]$ such that 
+all the marginals are standard uniform random variables.
+
+By definition,
+\begin{align*}
+C(1, 1, \ldots, 1, u_j, 1, \ldots, 1) = u_j.
+\end{align*}
+
+The probability density function $c$ associated with $C$ is given 
+by the usual formula,
+\begin{align*}
+c = \frac{\partial^n C}{\partial u_n \partial u_{n-1} \ldots \partial u_1 }
+\end{align*} 
+
+\subsection{Probability Integral Transform}
+Let $X \sim F$. Then $Y = F(X)$ is uniform. 
+\begin{proof}
+\begin{align*}
+P(Y \leq y ) &= P(F(X) \leq y )\\
+&= P(X \leq F^{-1}(y))\\
+&= F(F^{-1}(y))\\
+&= y.
+\end{align*}
+
+\end{proof}
+
+\subsection{Probability Quantile Transform}
+Let $U$ be uniform. Then, $X=F^{-1}(U) \sim F$
+\begin{proof}
+\begin{align*}
+P(X \leq x ) &= P(F^{-1}(U) \leq x )\\
+&= P(U \leq F(x))\\
+&= F(x).
+\end{align*}
+\end{proof}
+
 
 \subsection*{Log-normal random variable}
 If the log of a random variable $X$ is 
