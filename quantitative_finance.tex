@@ -893,6 +893,50 @@ such that
 The function $\mathcal{P}$ above is called a probability measure.
 \end{definition}
 
+\subsection{Transformation of Random Variables}
+Let $X$ and $Y$ be two random variables with joint 
+density function $f_{XY}$. Given,
+\begin{align*}
+U &= g(X, Y),\\
+V &= h(X, Y),
+\end{align*}
+what is the joint density of $f_{UV}$?
+
+We assume that we can \emph{invert} the transformation 
+and express $X$ and $Y$ as,
+\begin{align*}
+X &= \phi(U, V),\\
+Y &= \psi(U, V).
+\end{align*}
+
+Secondly,
+\begin{align*}
+dA = dx dy = \left|J(x, y)\right| du dv,
+\end{align*}
+where,
+\begin{align*}
+J(x, y) = 
+\begin{vmatrix}
+\frac{\partial x}{\partial u} & \frac{\partial y}{\partial u}\\
+\frac{\partial x}{\partial v} & \frac{\partial y}{\partial v}
+\end{vmatrix}.
+\end{align*}
+
+Then,
+\begin{align*}
+P((U,V) \in A) &= \int_{A} f_{UV}(u, v) \,du \,dv \\
+&= P((X,Y) \in B)\\
+&= \int_{B} f_{XY}(x, y) \,dx \,dy \\
+&= \int_{B} f_{XY}(\phi(u,v), \psi(u,v)) \,dx \,dy \\
+&= \int_{B} f_{XY}(\phi(u,v), \psi(u,v)) \left|J(x, y)\right|\,du \,dv.\\
+\end{align*}
+
+Therefore,
+\begin{align*}
+f_{UV}(u, v) = f_{XY}(\phi(u,v), \psi(u,v)) \left|J(x, y)\right|.
+\end{align*}
+
+
 \subsection*{Brownian Motion}
 Brownian motion is a stochastic 
 process $B(t)$, such that 
@@ -916,24 +960,23 @@ stochastic process.
 For example: buy Microsoft as 
 soon as the stock price goes below \$100 is a valid
 rule for a stopping time. On the other hand: sell 
-Microsoft first thing in the morning if the average price
-through out that day is less than \$50 per share
+Microsoft first thing in the morning if the closing price
+that day is less than \$50 per share
 is not a stopping time, since in the morning we can not 
-tell what average will be attained at the end of 
+tell what closing price will be attained at the end of 
 the day. 
 
-Let $\tau_m := \inf \{ t: B(t) = m \}$, i.e.\
-$\tau_m$ is the time (a random variable)
+Let $\tau_m := \inf \{ t: B(t) = m \}$, i.e.,\
+the random variable $\tau_m$ is the time
 when Brownian motion $B$ hits the 
 level $m$ for the first time.
 
 Notice that 
 \begin{equation}
-\tau_m = \inf \{ B(t) \geq m\}
+\tau_m = \inf \{t: B(t) \geq m\}
 \end{equation}
 
 What is the probability $P(\tau_m \leq T)$?
-
 \begin{equation*}
 P(\tau_m \leq T) = 
 P(\tau_m \leq T \cap B(T) \geq m ) + 
