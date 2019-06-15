@@ -1523,9 +1523,155 @@ Taking expectation w.r.t $Z$, we get,
 &= \mathrm{Var}(X) - \mathrm{Var}(\mathrm{E}(X|Z)).
 \end{align*}
 
-
 \end{proof}
 \section{Matrices}
+\subsection{Rank Theorem}
+\begin{theorem}
+Given a matrix $A$, the row rank of $A$ is the 
+same as the column rank of $A$. 
+\end{theorem}
+
+\begin{proof}
+Convert $A$ to its row reduced echelon from $R$. This is 
+done through elementary matrix operations on $A$, 
+\begin{align*}
+E_n \ldots E_2E_1A &= UA = R,\\
+A &= U^{-1}R.
+\end{align*}
+
+Therefore, rows of $R$ can be obtained as a linear combination of 
+the rows of $A$ and vice-versa, hence,
+\begin{align*}
+\mathrm{Row}(A) = \mathrm{Row}(R).
+\end{align*}
+
+The columns of $A$ and $R$ are related as follows,
+\begin{align*}
+UA &= \begin{bmatrix}
+UC_1 & UC_2 & \ldots & UC_n
+\end{bmatrix}\\
+&= \begin{bmatrix}
+C^{R}_1 & C^{R}_2 & \ldots & C^{R}_n
+\end{bmatrix}\\
+&= R.
+\end{align*}
+The key insight is that the columns of $R$ with leading $1$s form a basis 
+of $\mathrm{Col}(R)$. 
+
+We claim that the columns of $A$ for which $R$ has a leading $1$ are 
+a basis of $\mathrm{Col}(A)$. To prove this, let $j_1, j_2, \ldots, j_r$, be the indices of 
+columns where $R$ has a leading $1$, and let $\phi = \{C_{j_1}, C_{j_2}, \ldots, C_{j_r}\}$.
+To prove the linear independence of $\phi$, let
+\begin{align*}
+a_1 C_{j_1} + a_2 C_{j_2}  \ldots + a_r C_{j_r} = 0,
+\end{align*}
+then 
+\begin{align*}
+a_1 UC_{j_1} + a_2 UC_{j_2}  \ldots + a_r UC_{j_r} = 0,\\
+a_1 C^{R}_{j_1} + a_2 C^{R}_{j_2}  \ldots + a_r C^{R}_{j_r} = 0.
+\end{align*}
+Since the columns $\{C^{R}_{j_1}, C^{R}_{j_2}, \ldots, C^{R}_{j_r}\}$ 
+of $R$ are a basis of $\mathrm{Col}(R)$.
+the last equation implies that 
+$$a_1 = a_2 = \ldots = a_r = 0,$$ and therefore $\phi$ 
+is also a linearly independent set. 
+
+We now prove that $\phi$ spans $\mathrm{Col}(A)$. Let $b \in \mathrm{Col}(A)$, then,
+there exists $x$ such that,
+\begin{align*}
+b &= A x\\
+&= U^{-1}Rx.
+\end{align*}
+Since $Rx \in \mathrm{Col}(R)$ and $\{C^{R}_{j_1}, C^{R}_{j_2}, \ldots, C^{R}_{j_r}\}$ 
+is a basis of $\mathrm{Col}(R)$, we can write the last equation as,
+\begin{align*}
+b &= U^{-1} (x_{j_1} C^{R}_{j_1} + x_{j_2} C^{R}_{j_2}  \ldots + x_{j_r} C^{R}_{j_r})\\
+&= x_{j_1} C_{j_1} + x_{j_2} C_{j_2}  \ldots + x_{j_r} C_{j_r},\\
+\end{align*}
+and hence $b \in \mathrm{Span}(\phi)$. 
+
+This proves that $\phi$ is a basis of $\mathrm{Col}(A)$ and therefore,
+\begin{align*}
+\mathrm{dim(Col}(A))&=r=\mathrm{dim(Row}(A))\\
+\textrm{Row rank}(A)&=r=\textrm{Col Rank}(A).
+\end{align*}
+
+
+
+
+
+ 
+
+
+\end{proof}
+
+\begin{lemma}
+$A$ and $A^T$ have the same rank.
+\end{lemma}
+
+\subsection{Left Right Inverses}
+Let $A$ be a square matrix. If $A$ has a left inverse, 
+prove that $A$ is invertible and that the left inverse is indeed
+the inverse. 
+
+\begin{proof}
+Let $B_L$ be the left inverse of $A$. Then, by definition, 
+\begin{align*}
+B_LA = I.
+\end{align*}
+
+WRONG PROOF: Assumes that for each $y$, we can express it as $Ax$. What if 
+$y$ is not in the column space of $A$?
+
+As a result, for any $y$, the equation, $Ax = y$ has a solution $x = B_Ly$.
+This solution is unique, since,  
+\begin{align*}
+Ax_1 &= y = Ax_2\\
+x_1 &= B_Ly = x_2.
+\end{align*}
+Choosing, $y=e_i$, the above implies the existence of a 
+unique matrix $B_R$ where, 
+\begin{align*}
+B_R &= 
+\begin{bmatrix}
+x_1 & x_2 & \ldots & x_n
+\end{bmatrix}\\
+&= 
+\begin{bmatrix}
+B_L e_1 & B_L e_2 & \ldots & B_L e_n
+\end{bmatrix},
+\end{align*}
+such that,
+\begin{align*}
+AB_R = I.
+\end{align*}
+This proves the existence of a right inverse $B_R$.
+
+To show $B_L = B_R$, compute the product $B_LAB_R$ in the 
+following two ways,
+\begin{align*}
+B_L (A B_R) = B_L I = B_L,\\
+(B_L A) B_R  = I B_R = B_R,
+\end{align*}
+which proves $B_L = B_R$. 
+\end{proof}
+
+Therefore, $A$ is invertible since $B := B_L = B_R$ is the 
+unique inverse of $A$. 
+
+%$B_L$ is unique. Suppose there exists $B_l$ such 
+%that $B_l A = I$, then
+%\begin{align*}
+%B_l &= B_l I \\
+%&= B_l (AB_R)\\
+%&= (B_l A) B_R\\
+%&= I B_R\\
+%&= B_R\\
+%&= B_L. 
+%\end{align*}
+
+
+\subsection{LU Factorization}
 Given a square $n \times n$ matrix $A$, we can find the $LU$ decomposition 
 of $A$ such that 
 \begin{equation}
@@ -1547,7 +1693,6 @@ where each $L_i$ is a lower triangular matrix
 which introduces zeros in the $i^{th}$ column
 below the diagonal. 
 
-If $A$ is Hermitian and semi-positive definite
 \subsection{Orthogonally Diagonalizable Matrices}
 An orthogonally diagonalizable matrix is called
 a \emph{Normal} matrix. 
