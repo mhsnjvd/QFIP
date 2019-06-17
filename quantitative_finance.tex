@@ -1532,8 +1532,8 @@ same as the column rank of $A$.
 \end{theorem}
 
 \begin{proof}
-Convert $A$ to its row reduced echelon from $R$. This is 
-done through elementary matrix operations on $A$, 
+Convert $A$ to its row reduced 
+echelon from $R$. This is done through elementary matrix operations on $A$, 
 \begin{align*}
 E_n \ldots E_2E_1A &= UA = R,\\
 A &= U^{-1}R.
@@ -1547,7 +1547,10 @@ the rows of $A$ and vice-versa, hence,
 
 The columns of $A$ and $R$ are related as follows,
 \begin{align*}
-UA &= \begin{bmatrix}
+UA &= U\begin{bmatrix}
+C_1 & C_2 & \ldots & C_n
+\end{bmatrix}\\
+&= \begin{bmatrix}
 UC_1 & UC_2 & \ldots & UC_n
 \end{bmatrix}\\
 &= \begin{bmatrix}
@@ -1555,38 +1558,48 @@ C^{R}_1 & C^{R}_2 & \ldots & C^{R}_n
 \end{bmatrix}\\
 &= R.
 \end{align*}
-The key insight is that the columns of $R$ with leading $1$s form a basis 
+If the row rank of $A$ is $r$, then the matrix $R$ has $r$ rows 
+with leading $1$s. The key insight is that the columns of $R$ with leading $1$s form a basis 
 of $\mathrm{Col}(R)$. 
 
-We claim that the columns of $A$ for which $R$ has a leading $1$ are 
-a basis of $\mathrm{Col}(A)$. To prove this, let $j_1, j_2, \ldots, j_r$, be the indices of 
-columns where $R$ has a leading $1$, and let $\phi = \{C_{j_1}, C_{j_2}, \ldots, C_{j_r}\}$.
+We claim that the columns of $A$ 
+for which $R$ has a leading $1$, form a
+basis of $\mathrm{Col}(A)$. That is, the subset of columns 
+of $A$,
+\begin{align*}
+\phi = \{C_{j_1}, C_{j_2}, \ldots, C_{j_r}\},
+\end{align*}
+where $j_1, j_2, \ldots, j_r$ are the indices of 
+columns where $R$ has a leading $1$, is a basis of 
+$\mathrm{Col}(A)$. 
+
 To prove the linear independence of $\phi$, let
 \begin{align*}
-a_1 C_{j_1} + a_2 C_{j_2}  \ldots + a_r C_{j_r} = 0,
+a_1 C_{j_1} + a_2 C_{j_2} + \ldots + a_r C_{j_r} = 0,
 \end{align*}
 then 
 \begin{align*}
-a_1 UC_{j_1} + a_2 UC_{j_2}  \ldots + a_r UC_{j_r} = 0,\\
-a_1 C^{R}_{j_1} + a_2 C^{R}_{j_2}  \ldots + a_r C^{R}_{j_r} = 0.
+a_1 UC_{j_1} + a_2 UC_{j_2} + \ldots + a_r UC_{j_r} = 0,\\
+a_1 C^{R}_{j_1} + a_2 C^{R}_{j_2} + \ldots + a_r C^{R}_{j_r} = 0.
 \end{align*}
 Since the columns $\{C^{R}_{j_1}, C^{R}_{j_2}, \ldots, C^{R}_{j_r}\}$ 
 of $R$ are a basis of $\mathrm{Col}(R)$.
 the last equation implies that 
-$$a_1 = a_2 = \ldots = a_r = 0,$$ and therefore $\phi$ 
-is also a linearly independent set. 
-
-We now prove that $\phi$ spans $\mathrm{Col}(A)$. Let $b \in \mathrm{Col}(A)$, then,
-there exists $x$ such that,
 \begin{align*}
-b &= A x\\
-&= U^{-1}Rx.
+a_1 = a_2 = \ldots = a_r = 0.
+\end{align*}
+Therefore, $\phi$ is a linearly independent set. 
+
+To prove that $\phi$ spans $\mathrm{Col}(A)$, consider $b \in \mathrm{Col}(A)$.  
+Then, there exists $x$ such that,
+\begin{align*}
+b &= A x = U^{-1}Rx.
 \end{align*}
 Since $Rx \in \mathrm{Col}(R)$ and $\{C^{R}_{j_1}, C^{R}_{j_2}, \ldots, C^{R}_{j_r}\}$ 
 is a basis of $\mathrm{Col}(R)$, we can write the last equation as,
 \begin{align*}
-b &= U^{-1} (x_{j_1} C^{R}_{j_1} + x_{j_2} C^{R}_{j_2}  \ldots + x_{j_r} C^{R}_{j_r})\\
-&= x_{j_1} C_{j_1} + x_{j_2} C_{j_2}  \ldots + x_{j_r} C_{j_r},\\
+b &= U^{-1} (t_{j_1} C^{R}_{j_1} + t_{j_2} C^{R}_{j_2}  \ldots + t_{j_r} C^{R}_{j_r})\\
+&= t_{j_1} C_{j_1} + t_{j_2} C_{j_2}  \ldots + t_{j_r} C_{j_r},\\
 \end{align*}
 and hence $b \in \mathrm{Span}(\phi)$. 
 
@@ -1595,13 +1608,6 @@ This proves that $\phi$ is a basis of $\mathrm{Col}(A)$ and therefore,
 \mathrm{dim(Col}(A))&=r=\mathrm{dim(Row}(A))\\
 \textrm{Row rank}(A)&=r=\textrm{Col Rank}(A).
 \end{align*}
-
-
-
-
-
- 
-
 
 \end{proof}
 
