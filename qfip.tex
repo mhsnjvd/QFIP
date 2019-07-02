@@ -1357,43 +1357,55 @@ The minimum variance is given by,
 \end{align*}
 
 \section*{Linear Regression}
-We assume that the output $Y$ is a
-random variable and related to the input
-$X$ through a regression function
-\begin{align*}
-Y = r(X).
-\end{align*}
-
-What is the best approximation of a random variable $Y$ by a constant? Depends on 
+What is the best approximation of a random variable $Y$ by a constant $r$? Depends on 
 what we mean by best. We define best approximation as the one
 with minimum mean squared error (MSE):
 \begin{align*}
-c_* = \min_{c} \mathrm{E}[(Y-c)^2],
+r_* = \min_{r} \mathrm{E}[(Y-r)^2],
 \end{align*}
 assuming of course that the mean and variance of $Y$ is finite. 
 
-Setting the derivative of the MSE with respect to $c$ equal to $0$ and simplify to get,
+Setting the derivative (with respect to $r$) of the MSE to $0$ and simplify to get,
 \begin{align*}
-\frac{d}{dc} \mathrm{E}[(Y-c)^2] &= 0,\\
-\frac{d}{dc}\int (y-c)^2f_Y(y) dy &= 0,\\
-\int 2(y-c)f_Y(y) dy &= 0,\\
-c \int f_Y(y) dy &= \int y f_Y(y) dy,\\
-c &= \mathrm{E}[Y].
+\frac{d}{dr} \mathrm{E}[(Y-r)^2] &= 0,\\
+\frac{d}{dr}\int (y-r)^2f_Y(y) dy &= 0,\\
+\int 2(y-r)f_Y(y) dy &= 0,\\
+r \int f_Y(y) dy &= \int y f_Y(y) dy,\\
+r &= \mathrm{E}[Y].
 \end{align*}
 
-Next, what is the best approximation of $Y$ by a constanct $c$, given the 
-value of another random variable $X$ assuming that 
+Next, we assume that the $Y$ is the output random variable and 
+related to an input random variable $X$ and
 there is a joint density function $f_{XY}(x,y)$. 
 
+We now ask, what is the best approximation of $Y$ by a function $r(X)$, i.e., what choice 
+of the function $r$ will minimize
 \begin{align*}
-c_* = \min_{c} \mathrm{E}[(Y-c)^2|X],
+\mathrm{E}_{XY}[(Y-r(X))^2] = \int \int (y-r(x))^2 f_{XY}(x, y) dx dy.
 \end{align*}
 
-Linear regression assumes that the best estimate 
-of $Y$, given $X$ is the expected value of $Y$ where this 
-expectation is driven by a function linear in $X$:
+We use the tower law of 
+expectation trick here (for a different proof, see \cite[pp. 263]{papoulis2002probability}).
+
 \begin{align*}
-\mathrm{E}[Y|X=x] = X\beta + \epsilon.
+\mathrm{E}_{XY}[(Y-c(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-c(X))^2|X]]\\
+&\leq \mathrm{E}_X[\mathrm{E}[Y|X]]\\
+&= \mathrm{E}[Y|X].
+\end{align*}
+
+The inner expectation is conditioned on $X$, hence $r(X)$ is a constant when $X$ is given and by the previous 
+result, the best $r(X)$ in such a case is given by,
+\begin{align*}
+r(X) = \mathrm{E}[Y|X].
+\end{align*}
+
+Therefore, the best estimate 
+of $Y$ given $X$ in the MSE sense 
+is $\mathrm{E}[Y|X]$.
+
+Linear regression further assumes that $\mathrm{E}[Y|X]$ is linear in $X$:
+\begin{align*}
+\mathrm{E}[Y|X] = X\beta + \epsilon.
 \end{align*}
 
 The simplest case of linear regression is when 
