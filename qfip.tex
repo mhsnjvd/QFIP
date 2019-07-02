@@ -1364,6 +1364,31 @@ $X$ through a regression function
 Y = r(X).
 \end{align*}
 
+What is the best approximation of a random variable $Y$ by a constant? Depends on 
+what we mean by best. We define best approximation as the one
+with minimum mean squared error (MSE):
+\begin{align*}
+c_* = \min_{c} \mathrm{E}[(Y-c)^2],
+\end{align*}
+assuming of course that the mean and variance of $Y$ is finite. 
+
+Setting the derivative of the MSE with respect to $c$ equal to $0$ and simplify to get,
+\begin{align*}
+\frac{d}{dc} \mathrm{E}[(Y-c)^2] &= 0,\\
+\frac{d}{dc}\int (y-c)^2f_Y(y) dy &= 0,\\
+\int 2(y-c)f_Y(y) dy &= 0,\\
+c \int f_Y(y) dy &= \int y f_Y(y) dy,\\
+c &= \mathrm{E}[Y].
+\end{align*}
+
+Next, what is the best approximation of $Y$ by a constanct $c$, given the 
+value of another random variable $X$ assuming that 
+there is a joint density function $f_{XY}(x,y)$. 
+
+\begin{align*}
+c_* = \min_{c} \mathrm{E}[(Y-c)^2|X],
+\end{align*}
+
 Linear regression assumes that the best estimate 
 of $Y$, given $X$ is the expected value of $Y$ where this 
 expectation is driven by a function linear in $X$:
