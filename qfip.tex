@@ -783,6 +783,7 @@ to the performance of the underlying asset.
 \section{Credit}
 \subsection{Glossary}
 \begin{itemize}
+\item Spread: Spread is the constant (absolute) shift to the zero-coupon discount curve in all scenarios that is required to ensure that the model value of the bond (average value over all scenarios) equals the observed market price \cite{benDor2007Spread}.
 \item Rally: When bond prices go up and yields go down.
 \item Long CDS: When you have sold protection via a credit default swap. In this 
 case you are long the credit of the company you have sold the protection on. You 
@@ -801,7 +802,7 @@ $C$ are defined as
 D &= -\frac{1}{B}\frac{dB}{dy},\\
 C &=  \frac{1}{B}\frac{d^2B}{dy^2}.
 \end{align*}
-
+\item CDS Spread: Credit default swaps are priced in terems of a spread usually expressed in basis points. A CDS quote of 4.55 means that the CDS is pricing at a spread of 4.55 bp, or .0455\% i.e., to buy \$$10000$ of protection, you have to pay \$$4.55$ per year.
 \end{itemize}
 \subsection{Hazard Rate}
 The hazard rate (also called default intensity) is defined 
@@ -1236,6 +1237,14 @@ E_0[f(X)] &= \int_{-\infty}^{\infty} f(X) d\mu_X \\
 The collection of theorems that tell us how to make 
 drift disappear is commonly called Girsanov theory
 \cite[Ch.\ 13]{steele2001stochastic}.
+
+\section{Time Series Analysis}
+We assume that $\epsilon_t$ is white noise:
+\begin{align*}
+\epsilon_t &\sim \textrm{ i.i.d } N(0, \sigma^2),\\
+\mathrm{E}(\epsilon_t) &= 0,\\
+\gamma_\epsilon(t+h, t) &= \mathrm{Cov}(\epsilon_{t+h}, \epsilon_t) = 0, \qquad h \neq 0.
+\end{align*}
 
 \section{Portfolio Theory}
 Suppose we have a universe of 
