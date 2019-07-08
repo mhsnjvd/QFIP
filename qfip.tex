@@ -799,6 +799,7 @@ its Par Value.
 selling or buying the coupon of a treasury bond separately from the principal.
 \item Spread: Spread is the constant (absolute) shift to the zero-coupon discount curve in all scenarios that is required to ensure that the model value of the bond (average value over all scenarios) equals the observed market price \cite{dor2007dtssm}.
 \item Rally: When bond prices go up and yields go down.
+\item Sell-Off: When bond prices go down and yields go up (opposite of a rally).
 \item Long CDS: When you have sold protection via a credit default swap. In this 
 case you are long the credit of the company you have sold the protection on. You 
 are short a put option on the company's credit rating. 
@@ -1261,6 +1262,24 @@ We assume that $\epsilon_t$ is white noise:
 \gamma_\epsilon(t+h, t) &= \mathrm{Cov}(\epsilon_{t+h}, \epsilon_t) = 0, \qquad h \neq 0.
 \end{align*}
 
+\subsection{DTFT}
+The discrete time Fourier transform of 
+a doubly infinite, absolutely summable discrete sequence $x_n$
+is given by,
+\begin{align*}
+X(e^{i\omega}) = \sum_{n=-\infty}^{\infty} x_n e^{-i \omega n}.
+\end{align*}
+
+$X(e^{i\omega})$ is $2\pi$-periodic and for real $x_n$,
+\begin{align*}
+X(e^{i\omega}) = X^*(e^{-i\omega}).
+\end{align*}
+
+\begin{align*}
+x_n = \frac{1}{2\pi}
+\int_{-\pi}^{\pi} X(e^{i\omega})e^{i\omega n} d \omega.
+\end{align*}
+
 \section{Portfolio Theory}
 Suppose we have a universe of 
 $n$ assets, described by a $n$-random vector 
@@ -1373,6 +1392,7 @@ Setting the derivative (with respect to $r$) of the MSE to $0$ and simplify to g
 r \int f_Y(y) dy &= \int y f_Y(y) dy,\\
 r &= \mathrm{E}[Y].
 \end{align*}
+Note also that with $r=\mathrm{E}[Y]$, the MSE is $\mathrm{E}[(Y-\mathrm{E}[Y])^2]=\mathrm{Var}[Y]$.
 
 Next, we assume that the $Y$ is the output random variable and 
 related to an input random variable $X$ and
@@ -1388,12 +1408,12 @@ We use the tower law of
 expectation trick here (for a different proof, see \cite[pp. 263]{papoulis2002probability}).
 
 \begin{align*}
-\mathrm{E}_{XY}[(Y-c(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-c(X))^2|X]]\\
-&\leq \mathrm{E}_X[\mathrm{E}[Y|X]]\\
-&= \mathrm{E}[Y|X].
+\mathrm{E}_{XY}[(Y-c(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-c(X))^2]]\\
+&\leq \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-\mathrm{E}[Y|X])^2]]\\
+&= \mathrm{E}_X[\mathrm{Var}[Y|X]]\\
 \end{align*}
 
-The inner expectation is conditioned on $X$, hence $r(X)$ is a constant when $X$ is given and by the previous 
+The inner expectation is conditioned on $X$, therefore $r(X)$ is a constant and by the previous 
 result, the best $r(X)$ in such a case is given by,
 \begin{align*}
 r(X) = \mathrm{E}[Y|X].
@@ -1943,6 +1963,14 @@ Where can it be used?
 
 \section*{Questions}
 \begin{enumerate}
+\item Suppose $X$ and $Y$ are positive 
+random variables. What is the relationship between
+$P(X+Y>4)$ and $P(X>2)P(Y>2)$? Is one greater, smaller
+than the other or no such relationship in general?
+
+Use $X=Y$ and $X=-Y$ and see... but both $X,Y$ 
+have to be positive, so that doesn't really work or does it?
+
 \item We are given an array of integers starting 
 from $0$ and ending at $100$. We start from $0$ and 
 start flipping a fair coin. If a heads come down, 
@@ -2425,26 +2453,25 @@ only one pound?
 
 \section{Glossary}
 \begin{itemize}
-	\item Systematic Risk: The risk related to the market as a whole. This 
-	risk can not be diversified away. Another way to think of this risk 
-	is in terms of correlation. The market components are strongly correlated
-	when the market is going through a bad time.
-	\item Non-systematic Risk: Risk unique to an asset.
-	\item CAPM: Capital Asset Pricing Model. The main argument of the model is that 
-	the return should depend only on systematic risk. There is a simple 
-	equation describing the CAPM model:
-	\begin{equation}
-	E(r_a) = r_f + \beta( r_m - r_f ),
-	\label{eq:capm}
-	\end{equation}
-	where $r_a$ is the return of the asset,
-	$r_m$ is the return of the market, 
-	$r_f$ is the risk free rate and $E(.)$ is 
-	the expectation operator. 
+\item Systematic Risk: The risk related to the market as a whole. This 
+risk can not be diversified away. Another way to think of this risk 
+is in terms of correlation. The market components are strongly correlated
+when the market is going through a bad time.
+\item Non-systematic Risk: Risk unique to an asset.
+\item Idiosyncratic Risk: Same as Non-systematic risk, unique to the asset.
+\item CAPM: Capital Asset Pricing Model. The main argument of the model is that 
+the return should depend only on systematic risk. There is a simple 
+equation describing the CAPM model:
+\begin{equation}
+E(r_a) = r_f + \beta( r_m - r_f ),
+\label{eq:capm}
+\end{equation}
+where $r_a$ is the return of the asset,
+$r_m$ is the return of the market, 
+$r_f$ is the risk free rate and $E(.)$ is 
+the expectation operator. 
 	
-	\item Local Vol Model: 
-	
-	
+\item Local Vol Model: 
 \end{itemize}
 
 %\bibliographystyle{plain}
