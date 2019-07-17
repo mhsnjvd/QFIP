@@ -2026,10 +2026,24 @@ rank-1 matrix,
 where $a$ is a vector in $\mathbb{R}^n$. This matrix projects
 any vector onto the vector $a$. 
 
+If $Q$ is a unitary matrix, then the associated projection matrix 
+is $QQ^*$. The QR decomposition and the projection matrix 
+lead to the least squares solution of finding $x$ such 
+that $Ax-b$ has the smallest 2-norm. We have,
+\begin{align*}
+Ax &= Proj(b)\\
+QRx &= QQ^*b\\
+Rx &= Q^*b\\
+x &= R^{-1}Q^*b
+\end{align*}
+
 The outer product of $u$ and $v$, defined as $uv^T$, is a rank-$1$  matrix.
-The eigenvectors of $uv^T$ are 
-all vectors orthogonal to $v$ (with eigenvalue $0$) and the 
-vector $u$ (with eigenvalue $v^Tu$).
+The eigenvectors of $uv^T$ are:
+\begin{enumerate}
+\item All vectors orthogonal to $v$ (each with eigenvalue $0$).
+\item The vector $u$ (with eigenvalue $v^Tu$).
+\end{enumerate}
+
 
 \section{Using Chebyshev Methods}
 \begin{enumerate}
