@@ -818,7 +818,13 @@ D &= -\frac{1}{P}\frac{dP}{dy},\\
 C &=  \frac{1}{P}\frac{d^2P}{dy^2}.
 \end{align*}
 
-\item CDS Spread: Credit default swaps are priced in terems of a spread usually expressed in basis points. A CDS quote of 4.55 means that the CDS is pricing at a spread of 4.55 bp, or .0455\% i.e., to buy \$$10000$ of protection, you have to pay \$$4.55$ per year.
+\item CDS Spread: Credit default swaps are priced in terms of a spread usually expressed in basis points of the notional value. A CDS quote of 4.55 means that the CDS is pricing at a spread of 4.55 bp, or .0455\% i.e., to buy \$$10000$ of protection, you have to pay \$$4.55$ per year.
+
+\item EDF: Expected Default frequency. The default probability predicted by Moody's KMV model.
+
+\item Defensiveness: In general, defensiveness means the negative correlation of a signal with 
+down markets. In the context of credit, defensiveness of a signal means the negative correlation of the signal with the expected default frequency.
+
 \end{itemize}
 \subsection{Hazard Rate}
 The hazard rate (also called default intensity) is defined 
@@ -1262,6 +1268,26 @@ We assume that $\epsilon_t$ is white noise:
 \gamma_\epsilon(t+h, t) &= \mathrm{Cov}(\epsilon_{t+h}, \epsilon_t) = 0, \qquad h \neq 0.
 \end{align*}
 
+\subsection*{Stationary Process}
+There are various kinds of stationary time series. Of 
+particular interest and the most common type is \emph{weak stationarity}. 
+This means two things:
+\begin{enumerate}
+\item The time series has a stationary mean: $\mathrm{E}[x_t] = \mu$.
+\item The covariance is stationary: $\mathrm{Cov}[x_t x_s ]$ is only a function 
+of $|t-s|$.
+\end{enumerate}
+
+A random walk is not stationary:
+
+\begin{align*}
+x_t = x_{t-1} + \epsilon_t
+\end{align*}
+
+Given $x_0 = 0$, we have, $\mathrm{E}[x_t] = 0$ (which is constant), but
+$\mathrm{Cov}[x_t x_s] = \min(t, s) \sigma_{\epsilon}^2$, which is not 
+a function of $|t-s|$ only.
+ 
 \subsection{DTFT}
 The discrete time Fourier transform of 
 a doubly infinite, absolutely summable discrete sequence $x_n$
@@ -1392,9 +1418,14 @@ Setting the derivative (with respect to $r$) of the MSE to $0$ and simplify to g
 r \int f_Y(y) dy &= \int y f_Y(y) dy,\\
 r &= \mathrm{E}[Y].
 \end{align*}
-Note also that with $r=\mathrm{E}[Y]$, the MSE is $\mathrm{E}[(Y-\mathrm{E}[Y])^2]=\mathrm{Var}[Y]$.
+Therefore, $r_* = \mathrm{E}[Y]$. 
+Note also that with $r_*=\mathrm{E}[Y]$, the MSE of this approximation 
+is the variance of $Y$, i.e.,
+\begin{align*}
+\mathrm{E}[(Y-r_*)^2] = \mathrm{E}[(Y-\mathrm{E}[Y])^2]=\mathrm{Var}[Y].
+\end{align*}
 
-Next, we assume that the $Y$ is the output random variable and 
+Next, we assume that the output random variable $Y$ is 
 related to an input random variable $X$ and
 there is a joint density function $f_{XY}(x,y)$. 
 
@@ -1404,26 +1435,30 @@ of the function $r$ will minimize
 \mathrm{E}_{XY}[(Y-r(X))^2] = \int \int (y-r(x))^2 f_{XY}(x, y) dx dy.
 \end{align*}
 
-We use the tower law of 
-expectation trick here (for a different proof, see \cite[pp. 263]{papoulis2002probability}).
-
+One can minimize the above integral to find the function $r_*$, however, we will use the tower law of 
+expectation trick here. (For a proof based on integral minimization, see \cite[pp. 263]{papoulis2002probability}). We re-write the total expectation 
+using the tower law which allows us to use the result we just derived
+for approximating $Y$ by a constant:
 \begin{align*}
-\mathrm{E}_{XY}[(Y-c(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-c(X))^2]]\\
-&\leq \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-\mathrm{E}[Y|X])^2]]\\
+\mathrm{E}_{XY}[(Y-r(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r(X))^2]]\\
+&\geq \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r_*(X))^2]]\\
+&= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-\mathrm{E}[Y|X])^2]]\\
 &= \mathrm{E}_X[\mathrm{Var}[Y|X]]\\
 \end{align*}
 
 The inner expectation is conditioned on $X$, therefore $r(X)$ is a constant and by the previous 
-result, the best $r(X)$ in such a case is given by,
+result, the best $r(X)$, i.e. $r_*(X)$ in such a case is given by,
 \begin{align*}
-r(X) = \mathrm{E}[Y|X].
+r_*(X) = \mathrm{E}[Y|X].
 \end{align*}
 
 Therefore, the best estimate 
 of $Y$ given $X$ in the MSE sense 
-is $\mathrm{E}[Y|X]$.
+is $\mathrm{E}[Y|X]$. The function
+$\mathrm{E}[Y|X]$ is called the 
+\emph{regression function.} 
 
-Linear regression further assumes that $\mathrm{E}[Y|X]$ is linear in $X$:
+Linear regression further assumes that the regression function is linear in $X$:
 \begin{align*}
 \mathrm{E}[Y|X] = X\beta + \epsilon.
 \end{align*}
@@ -1433,7 +1468,7 @@ we assume that both $X$ and $Y$ are one dimensional
 real random variables and we have a set of 
 discrete observations,
 \begin{align*}
-Y_i = \beta_0 + \beta_1 X_i + \epsilon_i,
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i,
 \end{align*}
 such that $\mathrm{E}[\epsilon_i|X] = 0$ and 
 $\mathrm{Var}[\epsilon_i|X] = \sigma^2$.
@@ -1568,11 +1603,10 @@ is estimated by dividing the sample covariance $\mathrm{Cov}(x,y)$ with the
 sample covariance $\mathrm{Cov}(x, x)$.
 
 Notice that the explicit solution of $\beta_0$ above does not 
-have a clear interpretation. However, given we first solve for 
-$beta_1$, we can find $beta_0$ by,
-
+have a clear interpretation. However, if we solve for $\beta_1$ first, 
+we can find $\beta_0$ by,
 \begin{align*}
-\beta_0 = 
+\beta_0 = \overline{y}_i - \beta_1 \overline{x}_i
 \end{align*}
 
 \section{Statistics}
@@ -1581,7 +1615,7 @@ $beta_1$, we can find $beta_0$ by,
 \subsubsection{$Z$}
 This is just the central limit theorem. If 
 $X_1, X_2, \ldots, X_n$ are i.i.d., with the 
-mean and variance of each being $\mu$ and 
+mean and variance of each $X_i$ being $\mu$ and 
 $\sigma^2$, respectively, then,
 \begin{align*}
 \lim_{n \to \infty} \frac{\overline{X}_n-\mu}{\frac{\sigma}{\sqrt{n}}} = Z,
@@ -1928,8 +1962,57 @@ gives us the required correlated vector $x$:
 \end{equation}.
 \subsection*{Perturbation of the Identity Matrix}
 \begin{align*}
-\left(I + uv^T\right)^{-1} = I - \frac{uv^T}{1 - u^Tv}.
+\left(I + uv^T\right)^{-1} = I - \frac{uv^T}{1 - v^Tu}.
 \end{align*}
+\begin{align*}
+\left(I + UV\right)^{-1} = I - U(I-VU)^{-1}V.
+\end{align*}
+
+
+\subsection*{Condition number}
+The sensitivity of fractional change in output
+to fractional change in input is called the \emph{condition number} of 
+a problem.
+
+Suppose we have the problem of solving $Ax=b$ for a square, non-singular
+matrix $A$. There are a number of
+ways one can define the output and input variables. One useful and 
+practical choice is to consider $A$ as the input, $x=A^{-1}b$ as the output, and 
+assume that $b$ remains constant as the input and output change. 
+The problem is to find the mapping $f: A \to x = A^{-1}b$. By definition, the condition
+number of this problem is given by,
+\begin{align}
+\kappa(f) = \left(\|\Delta x\| / \|x\|\right) \Big{/} \left( \| \Delta A\| / \|A\| \right).
+\label{eq:cond}
+\end{align}
+
+Since $b$ is constant as input and output change, we get,
+\begin{align*}
+(A+\Delta A) (x + \Delta x) &= b.
+\end{align*}
+
+Using $Ax=b$ and ignoring $\Delta A \Delta x$ to get,
+\begin{align*}
+A \Delta x  &= - \Delta A x,
+\end{align*}
+or
+\begin{align*}
+\Delta x &= - A^{-1} \Delta A x,
+\end{align*}
+which implies
+\begin{align*}
+\frac{\| \Delta x \|}{\| x \|} \leq \| A^{-1} \| \| \Delta A \| .
+\end{align*}
+
+This together with \eqref{eq:cond} gives the bound
+\begin{align*}
+\kappa(f) \leq \|A\| \|A^{-1}\|.
+\end{align*}
+
+The number $\kappa(A) := \|A\| \|A^{-1}\|$ appears in so many other 
+contexts and problems that it is called the condition number of $A$.
+In the $2$-norm, $\kappa(A)$ is the ratio of the largest to the smallest
+singular value of $A$.
 
 \subsection*{Projection Matrices}
 A square matrix $P$ such that $P^2=P$ is called
@@ -1948,8 +2031,6 @@ The eigenvectors of $uv^T$ are
 all vectors orthogonal to $v$ (with eigenvalue $0$) and the 
 vector $u$ (with eigenvalue $v^Tu$).
 
-
-
 \section{Using Chebyshev Methods}
 \begin{enumerate}
 \item write a basic core
@@ -1960,6 +2041,39 @@ Where can it be used?
 \begin{enumerate}
 \item Corr Bump: It's a 1d root finding problem
 \end{enumerate}
+
+\section*{Inequalities}
+\subsection*{Bessel's Inequality}
+Projection of a vector is at most as big 
+as the vector. 
+\begin{proof}
+Let ${x_j}$ be a finite orthonormal set in a Hilbert space $\mathcal{H}$.
+For any $x \in \mathcal{H}$, we have, 
+\begin{align*}
+0 \leq \left\|x - \sum_{j}(x, x_j) x_j\right\|^2 = 
+\|x\|^2 - \sum_{j}|(x, x_j)|^2.
+\end{align*}
+\end{proof}
+
+\subsection*{Cauchy--Schwarz Inequality}
+The cosine of the angle between two vectors is 
+between $-1$ and $1$. 
+\begin{align*}
+|(x, y)|^2 \leq \|x\|^2 \|y\|^2.
+\end{align*}
+
+\begin{proof}
+If $y=0$, the inequality is trivial. If $y\neq 0$, define
+$y_0 = \frac{y}{\|y\|}$. Project $x$ on $y_0$ and apply
+Bessel's inequality, which gives,
+\begin{align*}
+0 \leq \left\|x - (x, y_0) y_0\right\|^2 = 
+\|x\|^2 - |(x, y_0)|^2.
+\end{align*}
+\end{proof}
+
+
+
 
 \section*{Questions}
 \begin{enumerate}
