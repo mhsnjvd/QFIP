@@ -1410,7 +1410,7 @@ r_* = \min_{r} \mathrm{E}[(Y-r)^2],
 \end{align*}
 assuming of course that the mean and variance of $Y$ is finite. 
 
-Setting the derivative (with respect to $r$) of the MSE to $0$ and simplify to get,
+Set the derivative (with respect to $r$) of the MSE to $0$ and simplify to get,
 \begin{align*}
 \frac{d}{dr} \mathrm{E}[(Y-r)^2] &= 0,\\
 \frac{d}{dr}\int (y-r)^2f_Y(y) dy &= 0,\\
@@ -1440,12 +1440,11 @@ expectation trick here. (For a proof based on integral minimization, see \cite[p
 using the tower law which allows us to use the result we just derived
 for approximating $Y$ by a constant:
 \begin{align*}
-\mathrm{E}_{XY}[(Y-r(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r(X))^2]]\\
-&\geq \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r_*(X))^2]]\\
+\mathrm{E}_{XY}[(Y-r(X))^2] &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r(X))^2|X]]\\
+&\geq \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-r_*(X))^2|X]]\\
 &= \mathrm{E}_X[\mathrm{E}_{Y|X}[(Y-\mathrm{E}[Y|X])^2]]\\
-&= \mathrm{E}_X[\mathrm{Var}[Y|X]]\\
+&= \mathrm{E}_X[\mathrm{Var}[Y|X]].
 \end{align*}
-
 The inner expectation is conditioned on $X$, therefore $r(X)$ is a constant and by the previous 
 result, the best $r(X)$, i.e. $r_*(X)$ in such a case is given by,
 \begin{align*}
@@ -1456,7 +1455,8 @@ Therefore, the best estimate
 of $Y$ given $X$ in the MSE sense 
 is $\mathrm{E}[Y|X]$. The function
 $\mathrm{E}[Y|X]$ is called the 
-\emph{regression function.} 
+\emph{regression function} or the 
+\emph{conditional expectation function}.
 
 Linear regression further assumes that the regression function is linear in $X$:
 \begin{align*}
@@ -1472,6 +1472,20 @@ y_i = \beta_0 + \beta_1 x_i + \epsilon_i,
 \end{align*}
 such that $\mathrm{E}[\epsilon_i|X] = 0$ and 
 $\mathrm{Var}[\epsilon_i|X] = \sigma^2$.
+
+Note that $\mathrm{E}[\epsilon_i|X] = 0$ implies $\mathrm{E}[\epsilon_i]=0$,
+since by the tower law,
+$$\mathrm{E}[\epsilon_i] = \mathrm{E}[\mathrm{E}[\epsilon_i|X]] = \mathrm{E}[0]=0.$$
+We can also show, again using the tower law, that for any 
+function $f(X)$,
+\begin{align*}
+\mathrm{E}[f(X)\epsilon_i] = \mathrm{E}[\mathrm{E}[f(X)\epsilon_i|X]] = \mathrm{E}[f(X)[\mathrm{E}[\epsilon_i|X]]]=0.
+\end{align*}
+
+A key idea in motivating regression is the decomposition
+\begin{align*}
+Y = \mathrm{E}[Y|X] + \epsilon.
+\end{align*}
 
 In matrix notation, we can write the above as,
 \begin{align*}
@@ -1773,17 +1787,37 @@ Let $B_L$ be the left inverse of $A$. Then, by definition,
 \begin{align*}
 B_LA = I.
 \end{align*}
+This implies that the columns of $A$ are linearly 
+independent, since $Ax=0 \Longrightarrow x = 0$:
+\begin{align*}
+Ax&=0 \\
+B_LAx&=0\\ 
+Ix &= 0\\
+x &= 0.
+\end{align*}
+Therefore, $A$ has full column rank. Let $n$ be the 
+number of columns of $A$. Then columns of 
+$A$ are a basis of $\mathbb{R}^{n}$ since,
+\begin{enumerate}
+\item Each column of $A$ is in $\mathbb{R}^n$ since $A$ is square. (This is the only place where we use the fact that $A$ is square).
+\item Columns of $A$ form a set of $n$ linearly independent vectors in $\mathbb{R}^n$.
+\item Columns of $A$ are a maximally independent set in $\mathbb{R}^n$ and therefore must span $\mathbb{R}^n$.
+\end{enumerate}
+This proves that the columns of $A$ can be linearly combined to 
+form any given right hand side, that is, for a right hand side $y$, we can find 
+a solution $x$ such $Ax=y$. Using the left inverse, one possible solution 
+is given by $x = B_Ly$.
 
 WRONG PROOF: Assumes that for each $y$, we can express it as $Ax$. What if 
 $y$ is not in the column space of $A$?
 
-As a result, for any $y$, the equation, $Ax = y$ has a solution $x = B_Ly$.
-This solution is unique, since,  
+
+The solution is unique, for if $x'$ is another solution, then,
 \begin{align*}
-Ax_1 &= y = Ax_2\\
-x_1 &= B_Ly = x_2.
+Ax' &= y = Ax\\
+x'&= B_Ly = x.
 \end{align*}
-Choosing, $y=e_i$, the above implies the existence of a 
+Choosing, $y=e_i$ for $ i =1, 2, \ldots, n$, the above implies the existence of a 
 unique matrix $B_R$ where, 
 \begin{align*}
 B_R &= 
@@ -1793,15 +1827,21 @@ x_1 & x_2 & \ldots & x_n
 &= 
 \begin{bmatrix}
 B_L e_1 & B_L e_2 & \ldots & B_L e_n
-\end{bmatrix},
+\end{bmatrix}\\
+&= B_L,
 \end{align*}
 such that,
 \begin{align*}
-AB_R = I.
+AB_R = 
+\begin{bmatrix}
+e_1 & e_2 & \ldots & e_n
+\end{bmatrix}=
+I.
 \end{align*}
-This proves the existence of a right inverse $B_R$.
+This proves the existence of a right inverse $B_R$ and 
+shows that $B_R=B_L$.
 
-To show $B_L = B_R$, compute the product $B_LAB_R$ in the 
+For another way to show that $B_L = B_R$, compute the product $B_LAB_R$ in the 
 following two ways,
 \begin{align*}
 B_L (A B_R) = B_L I = B_L,\\
@@ -2023,8 +2063,11 @@ rank-1 matrix,
 \begin{align*}
 \frac{aa^T}{a^Ta},
 \end{align*}
-where $a$ is a vector in $\mathbb{R}^n$. This matrix projects
-any vector onto the vector $a$. 
+where $a$ is a vector in $\mathbb{R}^n$. The projection of a 
+vector $b$ on $a$ is
+\begin{align*}
+Porj_{a}(b) = \frac{aa^T}{a^Ta} b = \frac{a^Tb}{a^Ta} a.
+\end{align*}
 
 In general, $A(A^*A)^{-1}A^*$ will project on the 
 columns of (a full column rank) matrix $A$. In particular, the 
@@ -2036,30 +2079,40 @@ Proj_{Col(A)}(b) = A(A^*A)^{-1}A^*b.
 
 Given $b$ and $A$, the least squares problem is to
 find an $x$ such that $Ax-b$ has the smallest 2-norm.
-Since projection error is orthogonal to the column 
-space of $A$, the least square problem boils down to,
+By definition, projecting $b$ on the column space of $A$
+makes the projection error $Ax-b$ orthogonal to the column 
+space of $A$, hence minimising the 2-norm of the 
+error. Therefore, the least squares problem boils down to
+a projection,
 \begin{align*}
-Ax &= Proj_{Col(A)}(b)= A(A^*A)^{-1}A^*b,
+Ax &= Proj_{Col(A)}(b)= A(A^*A)^{-1}A^*b.
 \end{align*}
-which implies,
+Since $A$ has full column rank, the left inverse of $A$ exists and 
+we immediately get 
 \begin{align*}
-A\left(x - (A^*A)^{-1}A^*b\right) = 0.
+x = (A^*A)^{-1}A^*b.
 \end{align*}
-Since $A$ has full column rank, its null space is trivial and 
+Equivalently, we can re-write the above as 
+\begin{align*}
+A\left(x - (A^*A)^{-1}A^*b\right) = 0,
+\end{align*}
+and since $A$ has full column rank, its null space is trivial,
 therefore,
 \begin{align*}
 x = (A^*A)^{-1}A^*b.
 \end{align*}
 
 If $Q$ is a unitary matrix, then the associated projection matrix 
-is $QQ^*$. The QR decomposition of $A$ together with the projection matrix 
-$QQ^*$ lead to another algorithm for least squares problem. We have,
+is $QQ^*$. The decomposition $QR=A$, together with the projection matrix 
+$QQ^*$ lead to another algorithm for the least squares problem. We have,
 \begin{align*}
 Ax &= Proj_{Col(A)}(b)\\
 QRx &= QQ^*b\\
-Rx &= Q^*b\\
-x &= R^{-1}Q^*b
+Rx &= Q^*b.
 \end{align*}
+The last displayed system is upper triangular and can be solved recursively 
+starting from the bottom. The $QR$ decomposition serves 
+as one of the best numerical methods for solving the least squares problem. 
 
 The outer product of $u$ and $v$, defined as $uv^T$, is a rank-$1$  matrix.
 The eigenvectors of $uv^T$ are:
