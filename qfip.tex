@@ -1778,9 +1778,9 @@ $A$ and $A^T$ have the same rank.
 \end{lemma}
 
 \subsection{Left Right Inverses}
-Let $A$ be a square matrix. If $A$ has a left inverse, 
-prove that $A$ is invertible and that the left inverse is indeed
-the inverse. 
+If a square matrix $A$ has a left inverse,
+prove that $A$ is invertible, i.e., $A$ has a right 
+inverse that matches the left inverse.  
 
 \begin{proof}
 Let $B_L$ be the left inverse of $A$. Then, by definition, 
@@ -1796,23 +1796,17 @@ Ix &= 0\\
 x &= 0.
 \end{align*}
 Therefore, $A$ has full column rank. Let $n$ be the 
-number of columns of $A$. Then columns of 
-$A$ are a basis of $\mathbb{R}^{n}$ since,
+number of columns of $A$, then the columns of 
+$A$ are a basis of $\mathbb{R}^{n}$,
 \begin{enumerate}
-\item Each column of $A$ is in $\mathbb{R}^n$ since $A$ is square. (This is the only place where we use the fact that $A$ is square).
-\item Columns of $A$ form a set of $n$ linearly independent vectors in $\mathbb{R}^n$.
-\item Columns of $A$ are a maximally independent set in $\mathbb{R}^n$ and therefore must span $\mathbb{R}^n$.
+\item Because $A$ is square, each column of $A$ is in $\mathbb{R}^n$. (This is the only place where we use the fact that $A$ is square).
+\item Columns of $A$ form a set of $n$ linearly independent vectors in $\mathbb{R}^n$ 
+and therefore must span $\mathbb{R}^n$.
 \end{enumerate}
 This proves that the columns of $A$ can be linearly combined to 
 form any given right hand side, that is, for a right hand side $y$, we can find 
 a solution $x$ such $Ax=y$. Using the left inverse, one possible solution 
-is given by $x = B_Ly$.
-
-WRONG PROOF: Assumes that for each $y$, we can express it as $Ax$. What if 
-$y$ is not in the column space of $A$?
-
-
-The solution is unique, for if $x'$ is another solution, then,
+is given by $x = B_Ly$. The solution is unique, for if $x'$ is another solution, then,
 \begin{align*}
 Ax' &= y = Ax\\
 x'&= B_Ly = x.
