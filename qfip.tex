@@ -1996,10 +1996,10 @@ gives us the required correlated vector $x$:
 \end{equation}.
 \subsection*{Perturbation of the Identity Matrix}
 \begin{align*}
-\left(I + uv^T\right)^{-1} = I - \frac{uv^T}{1 - v^Tu}.
+\left(I + uv^T\right)^{-1} = I - \frac{uv^T}{1 + v^Tu}.
 \end{align*}
 \begin{align*}
-\left(I + UV\right)^{-1} = I - U(I-VU)^{-1}V.
+\left(I + UV\right)^{-1} = I - U(I+VU)^{-1}V.
 \end{align*}
 
 
@@ -2050,7 +2050,34 @@ singular value of $A$.
 
 \subsection*{Projection Matrices}
 A square matrix $P$ such that $P^2=P$ is called
-a projection matrix. 
+a projection matrix. $P$ \emph{projects} any 
+vector on its column space. $P$ is an idempotent
+matrix by definition and vice-versa an 
+idempotent matrix is a projection matrix
+projecting on its own column space.
+
+\subsubsection*{Trace-Eigenvalues-Rank of Projection Matrices}
+An eigenvalue of a projection matrix is 
+either $1$ or $0$. Let $\lambda$ be an eigenvalue
+with eigenvector $x$, then
+\begin{equation}
+\lambda x = P x= P^2x = P (Px) = P(\lambda x) = \lambda P x = \lambda^2 x.
+\end{equation}
+Therefore, $\lambda = \lambda^2$, which implies that either $\lambda = 1$ or 
+$\lambda = 0$. 
+
+Since trace equals the sum of eigenvalues, for projection matrices, the trace equals
+the rank. Let $P$ be an $n \times n$ projection matrix of rank $r$. Then
+$P$ has $n-r$ linearly independent vectors in its null space, i.e.,\
+the eigenvalue $0$ has a multiplicity of $n-r$. Each of the remaining
+$r$ eigenvectors of $P$ must have eigenvalue $1$ since the eigenvalues 
+of $P$ are contained in the set $\{0, 1\}$. 
+\begin{align*}
+tr(P) &= \sum_{i=1}^n \lambda_i \\
+&= 1 \times r  + (n-r) \times 0 \\
+&= r.
+\end{align*}
+
 
 A typical example of a projection matrix is the 
 rank-1 matrix,
@@ -2078,15 +2105,16 @@ makes the projection error $Ax-b$ orthogonal to the column
 space of $A$, hence minimising the 2-norm of the 
 error. Therefore, the least squares problem boils down to
 a projection,
-\begin{align*}
+\begin{align}
 Ax &= Proj_{Col(A)}(b)= A(A^*A)^{-1}A^*b.
-\end{align*}
+\label{proj}
+\end{align}
 Since $A$ has full column rank, the left inverse of $A$ exists and 
 we immediately get 
 \begin{align*}
 x = (A^*A)^{-1}A^*b.
 \end{align*}
-Equivalently, we can re-write the above as 
+Equivalently, we can re-write \eqref{proj} as 
 \begin{align*}
 A\left(x - (A^*A)^{-1}A^*b\right) = 0,
 \end{align*}
