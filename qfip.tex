@@ -2058,26 +2058,34 @@ projecting on its own column space.
 
 \subsubsection*{Trace-Eigenvalues-Rank of Projection Matrices}
 An eigenvalue of a projection matrix is 
-either $1$ or $0$. Let $\lambda$ be an eigenvalue
-with eigenvector $x$, then
+either $1$ or $0$. 
+
+\begin{proof}
+Let $P$ be a projection matrix and
+$\lambda$ be an eigenvalue of $P$
+with eigenvector $x$. Then,
 \begin{equation}
 \lambda x = P x= P^2x = P (Px) = P(\lambda x) = \lambda P x = \lambda^2 x.
 \end{equation}
 Therefore, $\lambda = \lambda^2$, which implies that either $\lambda = 1$ or 
 $\lambda = 0$. 
+\end{proof}
 
 Since trace equals the sum of eigenvalues, for projection matrices, the trace equals
-the rank. Let $P$ be an $n \times n$ projection matrix of rank $r$. Then
+the rank. 
+
+\begin{proof}
+Let $P$ be an $n \times n$ projection matrix of rank $r$. Then
 $P$ has $n-r$ linearly independent vectors in its null space, i.e.,\
 the eigenvalue $0$ has a multiplicity of $n-r$. Each of the remaining
 $r$ eigenvectors of $P$ must have eigenvalue $1$ since the eigenvalues 
-of $P$ are contained in the set $\{0, 1\}$. 
+of $P$ are contained in the set $\{0, 1\}$. Therefore,  
 \begin{align*}
 tr(P) &= \sum_{i=1}^n \lambda_i \\
 &= 1 \times r  + (n-r) \times 0 \\
 &= r.
 \end{align*}
-
+\end{proof}
 
 A typical example of a projection matrix is the 
 rank-1 matrix,
@@ -2090,8 +2098,16 @@ vector $b$ on $a$ is
 Porj_{a}(b) = \frac{aa^T}{a^Ta} b = \frac{a^Tb}{a^Ta} a.
 \end{align*}
 
-In general, $A(A^*A)^{-1}A^*$ will project on the 
-columns of (a full column rank) matrix $A$. In particular, the 
+The eigenvectors of $\frac{aa^T}{a^Ta}$ are:
+\begin{enumerate}
+\item All vectors orthogonal to $a$ (each with eigenvalue $0$).
+\item The vector $a$ (with eigenvalue $1$).
+\end{enumerate}
+
+In general, for a full column rank matrix $A$, the matrix
+$$A(A^*A)^{-1}A^*$$ 
+will project on the 
+columns of $A$. In particular, the 
 projection of a vector $b$ on the column space of $A$ is given 
 by
 \begin{align*}
@@ -2126,7 +2142,7 @@ x = (A^*A)^{-1}A^*b.
 
 If $Q$ is a unitary matrix, then the associated projection matrix 
 is $QQ^*$. The decomposition $QR=A$, together with the projection matrix 
-$QQ^*$ lead to another algorithm for the least squares problem. We have,
+$QQ^*$ leads to another algorithm for the least squares problem. We have,
 \begin{align*}
 Ax &= Proj_{Col(A)}(b)\\
 QRx &= QQ^*b\\
@@ -2135,14 +2151,6 @@ Rx &= Q^*b.
 The last displayed system is upper triangular and can be solved recursively 
 starting from the bottom. The $QR$ decomposition serves 
 as one of the best numerical methods for solving the least squares problem. 
-
-The outer product of $u$ and $v$, defined as $uv^T$, is a rank-$1$  matrix.
-The eigenvectors of $uv^T$ are:
-\begin{enumerate}
-\item All vectors orthogonal to $v$ (each with eigenvalue $0$).
-\item The vector $u$ (with eigenvalue $v^Tu$).
-\end{enumerate}
-
 
 \section{Using Chebyshev Methods}
 \begin{enumerate}
