@@ -918,6 +918,29 @@ such that
 The function $\mathcal{P}$ above is called a probability measure.
 \end{definition}
 
+\begin{definition}[Random Variable]
+A random variable is a $\mathcal{P}$-measurable function $X:\Omega \to \mathbb{R}$.
+\end{definition}
+
+\subsection*{Conditional Probability Notation}
+Let $X$ and $Y$ be random variables with 
+a joint distribution. The expression $Y|X$ is not a random
+variable. It is simply a notation which dictates that any 
+operation on the random variable $Y$ must be done so
+using the the conditional distribution of 
+$Y$ given $X$. That is, $X$ should 
+be treated as a known constant. 
+Using this notation, we write, for example,  the conditional expectation of 
+$Y$ given $X$ as $E(Y|X)$. 
+This conditional expectation is indeed a random variable 
+as it is a function of $X$. To evaluate this conditional expectation,
+we use the conditional density of $Y$ given $X$ and sum or 
+integrate over all values of $Y$ \cite{blitzstein_harvard_110_final_review}:
+\begin{equation*}
+E(Y|X) = \int y f_{Y|X}(y) \: dy.
+\end{equation*}
+
+
 \subsection{Modes of convergence of a sequence of random variable}
 Let $X_n$ be a sequence of random variables defined on a probability 
 space. 
@@ -1261,20 +1284,31 @@ drift disappear is commonly called Girsanov theory
 \cite[Ch.\ 13]{steele2001stochastic}.
 
 \section{Time Series Analysis}
-We assume that $\epsilon_t$ is white noise:
+White noise is our basic building block
+for time series. We assume that $\epsilon_t$ is white noise:
 \begin{align*}
-\epsilon_t &\sim \textrm{ i.i.d } N(0, \sigma^2),\\
-\mathrm{E}(\epsilon_t) &= 0,\\
-\gamma_\epsilon(t+h, t) &= \mathrm{Cov}(\epsilon_{t+h}, \epsilon_t) = 0, \qquad h \neq 0.
+\epsilon_t &\sim \textrm{ i.i.d } N(0, \sigma^2).
+\end{align*}
+This assumption implies:
+\begin{align*}
+\mathrm{E}(\epsilon_t) 
+&= \mathrm{E}(\epsilon_t | \epsilon_{t-1}, \epsilon_{t-2}, \ldots) = 0,\\
+\gamma_{h}(t+h, t) &= \mathrm{Cov}(\epsilon_{t+h}, \epsilon_t) 
+= \mathrm{E}(\epsilon_{t+h} \epsilon_t) = 0, \qquad h \neq 0\\
+\gamma_{0}(t, t) &= \mathrm{Var}(\epsilon_t) 
+= \mathrm{Var}(\epsilon_t| \epsilon_{t-1}, \epsilon_{t-1}, \ldots) 
+= \sigma^2.
 \end{align*}
 
 \subsection*{Stationary Process}
-There are various kinds of stationary time series. Of 
-particular interest and the most common type is \emph{weak stationarity}. 
-This means two things:
+There are various kinds of stationary time series. The most 
+common and of particular interest to us is the 
+\emph{weakly stationary} time series. 
+A weakly stationary time series satisfies
+the following two conditions: 
 \begin{enumerate}
-\item The time series has a stationary mean: $\mathrm{E}[x_t] = \mu$.
-\item The covariance is stationary: $\mathrm{Cov}[x_t x_s ]$ is only a function 
+\item It has a stationary mean: $\mathrm{E}(x_t) = \mu$.
+\item The covariance is stationary: $\mathrm{Cov}(x_t, x_s)$ is only a function 
 of $|t-s|$.
 \end{enumerate}
 
@@ -1284,9 +1318,40 @@ A random walk is not stationary:
 x_t = x_{t-1} + \epsilon_t
 \end{align*}
 
-Given $x_0 = 0$, we have, $\mathrm{E}[x_t] = 0$ (which is constant), but
-$\mathrm{Cov}[x_t x_s] = \min(t, s) \sigma_{\epsilon}^2$, which is not 
+Given a starting value of 
+say $x_0$, we have, $\mathrm{E}(x_t) = x_0$, which is indeed a constant, however,
+$\mathrm{Cov}(x_t, x_s) = \min(t, s) \sigma_{\epsilon}^2$, which is not 
 a function of $|t-s|$ only.
+ 
+\subsubsection*{The Auto Regressive Moving Average (ARMA) Model}
+
+Let $L$ be the lag operator:
+\begin{align*}
+Lx_t = x_{t-1} 
+\end{align*} 
+
+Various ARMA processes can be described using
+the lag operator:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+$AR(1)$ & $x_t = \phi x_{t-1} + \epsilon_t$ & $(1-\phi L) x_t = \epsilon_t$\\
+$MA(1)$ & $x_t = \epsilon_t + \theta \epsilon_{t-1}$ & $x_t = (1+\theta L)\epsilon_t$\\
+$AR(p)$ & $x_t = \sum_{k=1}^{p}\phi_k x_{t-k} + \epsilon_t$ & $a_p(L) x_t = \epsilon_t$\\
+$MA(q)$ & $x_t = \epsilon_t + \sum_{k=1}^{q}\theta_{k} \epsilon_{t-k}$ & $x_t = b_q(L)\epsilon_t$\\
+$ARMA(p, q)$ &$x_t = \sum_{k=1}^{p}\phi_k x_{t-k} \epsilon_t
++ \epsilon_t + \sum_{k=1}^{q}\theta_{k} \epsilon_{t-k}$
+& $a_p(L)x_t = b_q(L)\epsilon_t$\\
+\end{tabular}
+\end{center}
+
+If $a_p(L)$ is invertible, we can convert an $AR(p)$ process
+to an $MA(\infty)$ process. Similarly, if $b_q(L)$ is 
+invertible, we can convert an $MA(q)$ process to an 
+$AR(\infty)$ process. 
+
+
+\subsection{Impulse Response}
  
 \subsection{DTFT}
 The discrete time Fourier transform of 
@@ -1401,6 +1466,36 @@ The minimum variance is given by,
 &= \frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}} = \lambda.
 \end{align*}
 
+\subsection*{What is Alpha?}
+Alpha is a forecast of residual return.
+Under the Grinold Kahn Framework (GKF), a rule
+of thumb for alpha is given by:
+
+Alpha = Volatility . IC . score
+
+Mathematically, we can write 
+\begin{equation}
+\alpha = \sigma \rho_{z, r_r} z,
+\end{equation}
+where $\rho_{z,r_r}$ (also known as the 
+Information coefficient or IC) is the 
+correlation of score with 
+residual return $r_r$, $\sigma$ is the 
+volatility of the residual return
+and $z$ is the standardized $z$-score or the
+signal value. 
+
+\subsection*{What is Beta?}
+Beta of an asset is the regression coefficient
+obtained when excess returns of an asset are 
+linearly regressed on the excess returns of the market
+
+Let $r_A$ and $r_M$ be the \emph{excess returns} 
+of the asset and the market respectively, then
+\begin{equation}
+\beta = \frac{\mathrm{Cov}(r_A, r_M)}{\mathrm{Var}(r_M)}
+\end{equation}
+
 \section*{Linear Regression}
 What is the best approximation of a random variable $Y$ by a constant $r$? Depends on 
 what we mean by best. We define best approximation as the one
@@ -1470,8 +1565,13 @@ discrete observations,
 \begin{align*}
 y_i = \beta_0 + \beta_1 x_i + \epsilon_i,
 \end{align*}
-such that $\mathrm{E}[\epsilon_i|X] = 0$ and 
-$\mathrm{Var}[\epsilon_i|X] = \sigma^2$.
+such that
+\begin{enumerate}
+\item residuals $\epsilon_i$ have zero mean: $\mathrm{E}[\epsilon_i|X] = 0$
+\item residuals are uncorrelated: 
+$\mathrm{E}[\epsilon_i \epsilon_j |X] = 0$ for $i \neq j$.  
+\item residuals have constant variance: $\mathrm{E}[\epsilon_i^2|X] = \mathrm{Var}[\epsilon_i|X] = \sigma^2$.
+\end{enumerate} 
 
 Note that $\mathrm{E}[\epsilon_i|X] = 0$ implies $\mathrm{E}[\epsilon_i]=0$,
 since by the tower law,
@@ -1609,12 +1709,13 @@ x^Ty & x^Tx
 {\frac{1}{n}\sum{x_i^2}-
 \left(\frac{1}{n}\sum{x_i}\right)\left(\frac{1}{n}\sum{x_i}\right)}\\
 & = \frac{\mathrm{Cov}(x, y)}{\mathrm{Cov}(x, x)}\\
+& = \frac{\mathrm{Cov}(x, y)}{\mathrm{Var}(x)}\\
 & = \rho \frac{\sigma_y}{\sigma_x}
 \end{align*}
 
 Here is the key idea to remember, the slope of the regression line $\beta_1$ 
 is estimated by dividing the sample covariance $\mathrm{Cov}(x,y)$ with the 
-sample covariance $\mathrm{Cov}(x, x)$.
+sample variance $\mathrm{Var}(x)$.
 
 Notice that the explicit solution of $\beta_0$ above does not 
 have a clear interpretation. However, if we solve for $\beta_1$ first, 
@@ -2087,6 +2188,12 @@ tr(P) &= \sum_{i=1}^n \lambda_i \\
 \end{align*}
 \end{proof}
 
+The only full rank projection matrix is the identity matrix. 
+
+\begin{proof}
+$P$ is full rank and square, therefore $P^{-1}$ exists. Since $P^2=P$, multiplying both sides by $P^{-1} $ gives
+$P=I$. 
+\end{proof}
 A typical example of a projection matrix is the 
 rank-1 matrix,
 \begin{align*}
