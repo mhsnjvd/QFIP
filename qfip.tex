@@ -1555,7 +1555,7 @@ $\mathrm{E}[Y|X]$ is called the
 
 Linear regression further assumes that the regression function is linear in $X$:
 \begin{align*}
-\mathrm{E}[Y|X] = X\beta + \epsilon.
+\mathrm{E}[Y|X] = \beta_0 + \beta_1 X.
 \end{align*}
 
 The simplest case of linear regression is when 
@@ -1576,7 +1576,8 @@ $\mathrm{E}[\epsilon_i \epsilon_j |X] = 0$ for $i \neq j$.
 Note that $\mathrm{E}[\epsilon_i|X] = 0$ implies $\mathrm{E}[\epsilon_i]=0$,
 since by the tower law,
 $$\mathrm{E}[\epsilon_i] = \mathrm{E}[\mathrm{E}[\epsilon_i|X]] = \mathrm{E}[0]=0.$$
-We can also show, again using the tower law, that for any 
+We can also show, using (1) from above and using the tower law, that the residuals
+$\epsilon_i$ are uncorrelated to any 
 function $f(X)$,
 \begin{align*}
 \mathrm{E}[f(X)\epsilon_i] = \mathrm{E}[\mathrm{E}[f(X)\epsilon_i|X]] = \mathrm{E}[f(X)[\mathrm{E}[\epsilon_i|X]]]=0.
@@ -1763,8 +1764,15 @@ $.05$.
 
 \subsection{The Law of Total Expectation}
 \begin{align*}
-\mathrm{E}(X) = \mathrm{E}_y(\mathrm{E}_x(X|Y)))
+\mathrm{E}(X) &= \mathrm{E}(\mathrm{E}(X|Y)),
 \end{align*}
+or to be more explicit regarding the probability 
+densities used for each expectation:
+\begin{align*}
+\mathrm{E}(X) &= \mathrm{E}_{Y}(\mathrm{E}_{X|Y}(X|Y)).
+\end{align*}
+
+
 
 \subsection{The Law of Total Variance}
 \begin{align*}
