@@ -1553,10 +1553,36 @@ $\mathrm{E}[Y|X]$ is called the
 \emph{regression function} or the 
 \emph{conditional expectation function}.
 
-Linear regression further assumes that the regression function is linear in $X$:
+Linear regression assumes a linear model, i.e.,
+$X$ and $Y$ are linearly related:
+
 \begin{align*}
-\mathrm{E}[Y|X] = \beta_0 + \beta_1 X.
+Y = \beta_0 + \beta_1 X + \epsilon,
 \end{align*}
+where $\epsilon$ is a noise term, and 
+furthermore, linear regression assumes that the regression function 
+or the conditional expectation is \emph{exactly} linear in $X$, i.e.\
+the conditional expectation of the noise term is zero:
+\begin{align*}
+\mathrm{E}[Y|X] = \beta_0 + \beta_1 X,
+\end{align*}
+
+or equivalently:
+\begin{align*}
+\mathrm{E}[\epsilon|X] = 0.
+\end{align*}
+
+Further assumptions of the linear 
+model are as follows:
+\begin{enumerate}
+\item residual $\epsilon$ has zero conditional mean: $\mathrm{E}[\epsilon|X] = 0$
+\item residuals are uncorrelated: 
+$\mathrm{E}[\epsilon_i \epsilon_j |X] = 0$ for $i \neq j$.  
+\item residuals have a constant variance: $\mathrm{E}[\epsilon^2|X] = 
+\mathrm{Var}[\epsilon|X] = \sigma^2$.
+\end{enumerate} 
+
+
 
 The simplest case of linear regression is when 
 we assume that both $X$ and $Y$ are one dimensional
@@ -1990,13 +2016,13 @@ where each $L_i$ is a lower triangular matrix
 which introduces zeros in the $i^{th}$ column
 below the diagonal. 
 
-\subsection{Orthogonally Diagonalizable Matrices}
-An orthogonally diagonalizable matrix is called
+\subsection{Unitarily Diagonalizable Matrices}
+A unitarily diagonalizable matrix is called
 a \emph{Normal} matrix. 
 \begin{align*}
 A \text{ is normal } \Leftrightarrow A = Q\Lambda Q^*,
 \end{align*}
-where $Q$ is orthogonal and $\Lambda$ is diagonal.
+where $Q$ is unitary i.e., $Q^*Q=I=QQ^*$ and $\Lambda$ is diagonal.
 
 A normal matrix commutes with its complex conjugate, and 
 this property also characterizes a normal matrix.
@@ -2018,6 +2044,50 @@ A \text{ is normal } \Leftrightarrow A^*A = AA^*.
 \end{tabular}
 \end{center}
 
+\subsection*{Real Quadratic Form}
+Let $A$ be a square matrix in $\mathbb{C}^{n \times n}$.
+If,
+$$ x^*Ax \in \mathbb{R}, \quad \forall x \in \mathbb{C}^n,$$
+then $A$ is Hermitian. 
+
+\begin{proof}
+Let 
+$$B = \frac{A + A^*}{2}, C=\frac{A-A^*}{2i},$$
+then $A = B+iC$ and both $B$ and $C$ are Hermitian. 
+Since $x^*Ax$ is real, we have, 
+\begin{align*}
+x^*Ax &= (x^*Ax)^* \\
+x^*(B+iC)x &= x^*(B^* + (iC)^*)x\\
+x^*(B+iC)x &= x^*(B - iC)x\\
+x^*Cx &= -x^*Cx\\
+x^*Cx &= 0.\\
+\end{align*}
+We now show that if $x^*Cx=0$ for all $x \in \mathbb{C}^n$, then 
+$C$ is the zero matrix. 
+
+
+For any vectors $x, y$, we have,
+\begin{align*}
+(x+y)^*C(x+y) &= 0\\
+x^*Cx+ y^*Cy + x^*Cy + y^*Cx  &= 0\\
+0 + 0 + x^*Cy + y^*Cx  &= 0\\
+x^*Cy + (x^*Cy)^* &= 0\\
+Im(x^*Cy) = 0.
+\end{align*}
+Replace $y$ by $iy$ in the above and we get
+\begin{align*}
+Im(ix^*Cy) &=0\\
+Re(x^*Cy) &= 0.
+\end{align*}
+Therefore, $x^*Cy = 0$ for any $x, y$.
+Now choose $x, y$ to be the unit vectors along directions $i, j$ to obtain
+$e_i^*Ce_j = c_{ij} = 0$ which implies that $C$ is the zero matrix and 
+hence $A = A^*$. 
+
+\end{proof}
+
+
+
 \subsection{Cholseky Decomposition in Finance}
 The fundamental use of Cholesky decomposition 
 in finance is to generate a vector of correlated
@@ -2029,9 +2099,9 @@ construction real, symmetric, and positive semi-definite.
 \subsubsection{Example:}
 Suppose we have two independent zero mean random variables 
 $Z_1$ and $Z_2$ with variances $\sigma_1$ and $\sigma_2$, 
-respectively, and we want to construct two correlated random variables
+respectively. We wish to construct random variables
 $X_1$ and $X_2$, again with variances $\sigma_1$ and $\sigma_2$ respectively,
-but now we want the correlation between $X_1$ and $X_2$ to be $\rho$. 
+such that the correlation between $X_1$ and $X_2$ is $\rho$. 
 
 The correlation matrix in this simple $2 \times 2$ case is
 \begin{equation}
@@ -2266,6 +2336,18 @@ Rx &= Q^*b.
 The last displayed system is upper triangular and can be solved recursively 
 starting from the bottom. The $QR$ decomposition serves 
 as one of the best numerical methods for solving the least squares problem. 
+
+\subsection*{Variance Covariance Matrices}
+Let $X$ be a random vector such that
+\begin{align*}
+X = \left[
+x_1 \\
+x_2 \\
+\vdots
+x_n
+\right[
+\end{align*}
+
 
 \section{Using Chebyshev Methods}
 \begin{enumerate}
