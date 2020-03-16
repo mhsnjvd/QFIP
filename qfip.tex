@@ -71,6 +71,9 @@
 \newtheorem{solution}{Solution}
 \newtheorem{summary}{Summary}
 \numberwithin{equation}{section}
+
+\DeclareMathOperator*{\argmax}{argmax}
+
 %--------------------------------------------------------
 \begin{document}
 \title[Math Finance]{Mathematical Finance in Practice}
@@ -1373,10 +1376,11 @@ x_n = \frac{1}{2\pi}
 
 \section{Portfolio Theory}
 Suppose we have a universe of 
-$n$ assets, described by a $n$-random vector 
-$A =[a_1, a_2, \ldots, a_n]^T$.
+$n$ assets, and the returns of these assets
+are given by a $n$-vector 
+$r =[a_1, a_2, \ldots, a_n]^T$.
 
-We assume that their mean vector is given by 
+We assume that the mean of $r$ is given by 
 \begin{align*}
 \mu = 
 \begin{bmatrix}
@@ -1386,7 +1390,7 @@ We assume that their mean vector is given by
 \mu_n
 \end{bmatrix},
 \end{align*}
-while the covariance matrix is given by
+while the covariance matrix of $r$ is given by
 \begin{align*}
 \Sigma = \begin{bmatrix}
 \sigma_1^2  & \sigma_{12} & \cdots & \sigma_{1n}\\
@@ -1400,11 +1404,11 @@ while the covariance matrix is given by
 
 Note that $\sigma_{ij} = \rho_{ij} \sigma_i \sigma_j$.
 
-\subsection*{Minimum Variance Portfolio}
-Our portfolio $P$ is a linear combination of 
-assets:
+\subsection*{A Fully Invested Minimum Variance Portfolio}
+The return of our portfolio $r_p$ is a linear combination of 
+weighted asset returns:
 \begin{align*}
-P = w \cdot a,
+r_p = w \cdot r,
 \end{align*}
 where $w = [w_1, w_2, \ldots, w_n]^T$ is a weight 
 vector such that \
@@ -1420,7 +1424,7 @@ Recall that in general for a matrix $A$ and a random vector $X$,
 $\mathrm{Var}(AX) = A\Sigma A^T$.
 Therefore,
 \begin{align*}
-\mathrm{Var}(P) = \mathrm{Var}(w^T a) = w^T\Sigma w.
+\mathrm{Var}(r_p) = \mathrm{Var}(w^T a) = w^T\Sigma w.
 \end{align*}
 
 We have the following standard minimization problem:
@@ -1454,7 +1458,7 @@ w^* &=\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}.
 
 The minimum variance is given by,
 \begin{align*}
-\sigma_{min}^2 &= w^{*T} \Sigma w,\\
+\sigma_{min}^2 &= w^{*T} \Sigma w^{*},\\
 &= \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
 \Sigma \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right),\\
 &=  \left(\frac{\Sigma^{-1} {\bf 1}}{{\bf 1}^T \Sigma^{-1} {\bf 1}}\right)^T
@@ -1465,6 +1469,335 @@ The minimum variance is given by,
 \frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}},\\
 &= \frac{1}{{\bf 1}^T \Sigma^{-1} {\bf 1}} = \lambda.
 \end{align*}
+
+\subsection*{Characteristic Portfolio}
+As before, we assume a portfolio of 
+$n$ assets defined by a weight vector 
+$w \in \mathbb{R}^n$. 
+
+\begin{definition}[Attribute]
+Given an asset, an attribute is a mapping 
+from the asset to a real number. 
+
+For $n$ assets, an attribute vector $a \in \mathbb{R}^n$ 
+is formed by defining the $i^{th}$ component of $a$ as  
+the attribute of the $i^{th}$ asset .    
+\end{definition}
+
+Some examples of an attribute are: asset return, 
+asset beta, asset size, asset market cap, membership 
+in an industrial sector indicated by a binary variable etc. 
+
+\begin{definition}[Unit Exposure]
+A portfolio 
+is said to have unit exposure to an attribute 
+vector $a$ if the weights of the portfolio $w$ 
+are chosen such that $w \cdot a = 1$. 
+\end{definition}
+
+As an example, the minimum variance problem we solved in the 
+previous section had the constraint $w \cdot \mathbf{1} = 1$, i.e.\
+the resulting portfolio had unit exposure to the membership 
+attribute. In other words, a fully invested portfolio has unit 
+exposure to the membership attribute. 
+
+\begin{definition}[Characteristic Portfolio]
+Given an attribute vector $a$, the minimum variance 
+portfolio with unit exposure to $a$ is called the 
+characteristic portfolio of $a$. 
+\end{definition}
+
+\begin{align*}
+\min_{w \in \mathbb{R}^n} w^T \Sigma w,\\
+w \cdot a = 1.
+\end{align*}
+
+\begin{align*}
+\Sigma w - l a &= 0, \\
+w &= l \Sigma^{-1} a.
+\end{align*}
+Using the constraint, $w \cdot a = 1$,
+we get
+\begin{align*}
+w = \frac{\Sigma^{-1}a}{a^T \Sigma^{-1} a}
+\end{align*}
+
+
+
+\subsection*{A Minimum Variance Portfolio with Multiple Constraints}
+\begin{theorem}
+Let $w, f \in \mathbb{R}^n$, 
+$\Sigma \in \mathbb{R}^{n \times n}$,
+$a_i \in \mathbb{R}^{n}$ and $c_i \in \mathbb{R}$,
+$\lambda > 0$.
+The solution of the problem:
+\begin{equation*}
+\argmax_{w \in \mathbb{R}^n} ~ w^Tf - \frac{\lambda}{2} w^T \Sigma w,
+\end{equation*}
+with $m$ exposure constraints,
+\begin{align*}
+w \cdot a_1 &= c_1,\\
+w \cdot a_2 &= c_2,\\
+~       &\vdots ~ \\
+w \cdot a_n &= c_m,
+\end{align*}
+$m < n$, 
+has the form
+\begin{equation*}
+w^{*} = b_f w_f + b_1 w_1 + b_2 w_2 + \ldots + b_m w_m,
+\end{equation*}
+where $b_f, b_1, b_2, \ldots, b_m$ are scalars and 
+$w_i$ is the characteristic portfolio of the attribute vector $a_i$. 
+
+Furthermore, assuming that $a_i$ are 
+linearly independent, we can find $w$ by 
+solving a linear system of equations completely determined 
+by the characteristic portfolio weights $w_1, w_2, \ldots, w_m$. 
+\end{theorem}
+
+\begin{proof}
+The Lagrangian associated with the problem is given by,
+\begin{align*}
+L(w, l) = \left(w^Tf - \frac{\lambda}{2} w^T \Sigma w\right) - 
+l_1 w_1 \cdot a_1 - l_2 w_2 \cdot a_2 - \ldots - l_m w_m \cdot a_m.
+\end{align*}
+
+Differentiating with respect to $w$ and setting the result equal to zero gives
+us the optimal weights vector $w^*$,
+\begin{align*}
+w^* = 
+\frac{1}{\lambda}\Sigma^{-1}\left(f - l_1 a_1 - 
+l_2 a_2 - \ldots - l_m a_m\right),
+\end{align*}
+which implies that we can write 
+$w^*$ as,
+\begin{align*}
+w^* &= 
+\frac{1}{\lambda}\Sigma^{-1}f - \frac{l_1}{\lambda}\Sigma^{-1}a_1 - 
+\frac{l_2}{\lambda}\Sigma^{-1} a_2 - \ldots - \frac{l_m}{\lambda}\Sigma^{-1} a_m.
+\end{align*}
+Since the characteristic portfolio of an attribute vector 
+$a_i$ has the form $d_i\Sigma^{-1} a_i$ where $d_i$ is a real number,
+the last equation above has the form,
+\begin{align*}
+w^{*}
+&= b_f w_f + b_1 w_1 + b_2 w_2 + \ldots + b_m w_m,
+\end{align*}
+for some real numbers $b_f, b_1, b_2, \ldots, b_m$.
+This proves the first part of the theorem. 
+
+
+Observe that we can write the exposure 
+constraints as
+\begin{align*}
+A^Tw &= 
+A^TWb = c,
+\end{align*}
+where,
+\begin{align*}
+A &= 
+\begin{bmatrix}
+a_1 & a_2 & \cdots & a_m
+\end{bmatrix},
+\quad
+W = 
+\begin{bmatrix}
+w_1 & w_2 & \cdots & w_m
+\end{bmatrix}, 
+\end{align*}
+and 
+\begin{align*}
+c &= 
+\begin{bmatrix}
+c_1 \\
+c_2 \\
+\vdots\\
+ c_n
+\end{bmatrix},
+\quad
+b = 
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+\vdots\\
+ b_n
+\end{bmatrix}.
+\end{align*}
+
+Note that
+\begin{equation*}
+w = Wb,
+\end{equation*}
+and the matrix $W$ can 
+be re-written as,
+\begin{align*}
+W &= 
+\begin{bmatrix}
+w_1 & w_2 & \cdots & w_n
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+d_1\Sigma^{-1} a_1 & d_2\Sigma^{-1} a_2 & \cdots & d_n\Sigma^{-1} a_n
+\end{bmatrix} \\
+&=\Sigma^{-1}
+\begin{bmatrix}
+a_1 &  a_2 & \cdots &  a_n
+\end{bmatrix} 
+\begin{bmatrix}
+d_1 &  ~     &   ~\\
+~     &  d_2 &   ~\\
+~     &  \cdots & ~\\
+ ~    & ~          & d_n
+\end{bmatrix}\\
+&= 
+\Sigma^{-1} A D.
+\end{align*}
+
+The linear constraints can be written as 
+\begin{align*}
+A^TW b &= c\\
+A^T\Sigma^{-1}AD b &= c.
+\end{align*}
+since $A, D, \Sigma^{-1}$ are invertible, a unique 
+solution $b$ exists. 
+\end{proof}
+
+\subsection*{Alpha Derivation}
+Let's assume that $f$ is a forecast vector 
+in $\mathbb{R}^n$ and $\Sigma$ is 
+an $\mathbb{R}^{n\times n}$ 
+symmetric positive definite covariance
+matrix obtained from a factor model and 
+$\lambda \geq 0$ is the risk aversion 
+parameter. 
+
+Our aim is to solve a constrained mean-variance optimization
+problem. We want to find
+\begin{align*}
+\argmax_{w \in \mathbb{R}^n} ~ w^{T} f - \frac{1}{2} \lambda w^{T} \Sigma w,
+\end{align*}
+subject to constraints of being dollar neutral and 
+neutral to $k$ other factors $f_1, f_2, \ldots f_k$. We can impose 
+these  constraints as,
+\begin{align*}
+[\mathbf{1} ~ F]^{T} w &= 0,
+\end{align*}
+where $F =[f_1 ~ f_2 ~ \cdots ~ f_k]$ is the $n \times k$
+factor matrix.  
+
+Using a factor model based on $F$, we run the 
+$k$-variate cross-sectional regression on the 
+return vector $r$:
+\begin{align*}
+r = a\mathbf{1} + F \beta_f + \epsilon,
+\end{align*}
+where $\beta_f$ is the unknown $k$-vector
+of regression coefficients.
+
+The above factor model implies that $\Sigma$,
+the covariance matrix of $r$, can be decomposed as
+\begin{align*}
+\Sigma = FV_{F}F^{T} + \Delta,
+\end{align*}
+where $V_{F}$ is the $k \times k$ 
+covariance matrix of the $k$ factors and 
+$\Delta = \mathrm{Var}(\epsilon)$ is a $n \times n$ diagonal matrix (of specific risk) with 
+positive entries on the diagonal.
+
+This decomposition of $\Sigma$ together with our 
+factor neutrality constraint $w^{T}F=0$, implies that
+$w^{T} \Sigma w =  w^{T} \Delta w$. 
+Therefore, the original optimization problem can be re-written 
+as:
+\begin{align*}
+\argmax_{w \in \mathbb{R}^n} ~ w^{T} f - \frac{1}{2} \lambda w^{T} \Delta w,
+\end{align*}
+with the same original constraints
+\begin{align*}
+[\mathbf{1} ~ F]^{T} w &= 0.
+\end{align*}
+
+Forming the Lagrangian, we find that the optimal holdings
+$w_{*}$ are given by
+\begin{align*}
+w_{*} = \frac{1}{\lambda} \Delta^{-1} \left(f - F \boldsymbol{\ell} - l \mathbf{1}\right),
+\end{align*}
+where $\boldsymbol{\ell}$ is the $k$-vector of Lagrange multipliers associated with the 
+factor neutral constraints and $l$ is the scalar Lagrange multiplier for the dollar neutral 
+constraint. 
+
+The single period optimal return $r_{\pi}$ of our 
+portfolio corresponding to the optimal holdings $w_{*}$
+is given by,
+\begin{align*}
+r_{\pi} &= w_{*}^{T} r\\
+&= w_{*}^{T}\left( a\mathbf{1} + F\beta_f + \epsilon\right)\\
+&= w_{*}^{T}\epsilon\\
+&=\frac{1}{\lambda} \left(\Delta^{-1} \left(f - F \boldsymbol{\ell} - l \mathbf{1}\right)\right)^{T}\epsilon\\
+&=\frac{1}{\lambda} 
+\left(\underbrace{\Delta^{-\frac{1}{2}}\left( f - F \boldsymbol{\ell} - l \mathbf{1}\right)}_
+{\text{Risk adj. alpha} := \hat{\alpha}}\right)^{T}
+\left(\underbrace{\qquad \Delta^{-\frac{1}{2}}\epsilon \qquad}_
+{\text{Risk adj. spec. ret.} := \hat{\epsilon}}\right).\\
+r_{\pi} &= \frac{1}{\lambda}\hat{\alpha}^{T} \hat{\epsilon}
+\end{align*}
+We have written the optimal portfolio return $r_{\pi}$ as 
+the inner product of the risk adjusted factor neutral forecast $\hat{\alpha}$ 
+with the risk adjusted factor neutral specific returns $\hat{\epsilon}$, scaled by the 
+risk aversion parameter $\lambda$.  
+
+Since we cross-sectionally z-score $\hat{\alpha}$, the in-sample mean 
+$\overline{\hat{\alpha}} = 0$ and therefore, the sample
+estimate of $\mathrm{Cov}(\hat{\alpha}, \hat{\epsilon
+})$ is simply given by $\frac{1}{n-1} \hat{\alpha}^{T} \hat{\epsilon}$.
+This allows the approximation,
+\begin{align*}
+r_{\pi} &= \frac{1}{\lambda}\hat{\alpha}^{T} \hat{\epsilon}\\
+& \approx \frac{n-1}{\lambda} \mathrm{Cov}(\hat{\alpha}, \hat{\epsilon})\\
+&= \frac{n-1}{\lambda} \mathrm{Corr}(\hat{\alpha}, \hat{\epsilon}) \sigma_{\hat{\alpha}} \sigma_{\hat{\epsilon}}.
+\end{align*}
+
+For the variance of $r_{\pi}$, we have
+\begin{align*}
+\sigma_{r_{\pi}}^2 &= \frac{1}{\lambda^2}\hat{\alpha}^{T} \mathrm{Var}(\hat{\epsilon}) \hat{\alpha}\\
+&= \frac{1}{\lambda^2}\hat{\alpha}^{T} \hat{\alpha}\\
+&= \frac{1}{\lambda^2}\|\hat{\alpha}\|_{2}^{2},
+\end{align*}
+since $\mathrm{Var}(\hat{\epsilon}) = \mathrm{Var}(\Delta^{-\frac{1}{2}}\epsilon)=\Delta^{-\frac{1}{2}}\mathrm{Var}(\epsilon)\Delta^{-\frac{1}{2}} = \Delta^{-\frac{1}{2}} \Delta \Delta^{-\frac{1}{2}} = I$,  the identity matrix.
+
+Since the sample estimate of ${\sigma}_{\hat{\alpha}}^{2}$ is given by 
+$\frac{1}{n-1} \|\hat{\alpha}\|^2_2$, 
+we get
+\begin{align*}
+\sigma_{r_{\pi}}^{2} &= \frac{1}{\lambda^2}\|\hat{\alpha}\|_{2}^{2}\\
+\sigma_{r_{\pi}}^{2} & \approx \frac{n-1}{\lambda^2} \sigma_{\hat{\alpha}}^{2},
+\end{align*}
+which allows us to write,
+\begin{align*}
+\lambda & \approx \sqrt{n-1} \frac{ \sigma_{\hat{\alpha}}}{\sigma_{r_{\pi}}}.
+\end{align*}
+
+Substituting this value of $\lambda$ in the earlier expression for $r_{\pi}$ gives us
+\begin{align*}
+r_{\pi} &= \sqrt{n-1}
+\mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})
+\sigma_{r_{\pi}}
+\sigma_{\hat{\epsilon}}.
+\end{align*}
+
+For a tangible  financial interpretation, each term of our
+return may be labelled as:
+\begin{align*}
+r_{\pi} &= \underbrace{\sqrt{n-1}}_\text{Breadth}
+\underbrace{\mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})}_\text{Skill}
+\underbrace{\sigma_{r_{\pi}}}_\text{Traget risk} 
+\underbrace{\sigma_{\hat{\epsilon}}}_\text{Opportunity}.
+\end{align*}
+
+
+
+
+
 
 \subsection*{What is Alpha?}
 Alpha is a forecast of residual return.
@@ -1572,7 +1905,7 @@ or equivalently:
 \mathrm{E}[\epsilon|X] = 0.
 \end{align*}
 
-Further assumptions of the linear 
+All the assumptions of the linear 
 model are as follows:
 \begin{enumerate}
 \item residual $\epsilon$ has zero conditional mean: $\mathrm{E}[\epsilon|X] = 0$
@@ -1754,29 +2087,29 @@ we can find $\beta_0$ by,
 \section{Statistics}
 
 \subsection{The trio: $Z$-$\chi^2$-$t$}
-\subsubsection{$Z$}
+\subsubsection[The Normal distribution]{The Normal distribution}
 This is just the central limit theorem. If 
 $X_1, X_2, \ldots, X_n$ are i.i.d., with the 
 mean and variance of each $X_i$ being $\mu$ and 
 $\sigma^2$, respectively, then,
 \begin{align*}
-\lim_{n \to \infty} \frac{\overline{X}_n-\mu}{\frac{\sigma}{\sqrt{n}}} = Z,
+Z := \lim_{n \to \infty} \frac{\overline{X}_n-\mu}{\frac{\sigma}{\sqrt{n}}},
 \end{align*}
 where $Z$ is a standard normal. 
-\subsubsection{$\chi^2$}
+\subsubsection[The Chi-squared distribution]{The Chi-squared distribution}
 If $Z_1, Z_2, \ldots, Z_n$ are independent standard normals,
 then, 
 \begin{align*}
-\chi^2(n) = \sum_{i}^{n} Z_i ^2,
+\chi^2_n := \sum_{i}^{n} Z_i ^2,
 \end{align*}
 has a chi-square distribution with $n$ degrees of freedom.
 
-\subsubsection{$t$}
+\subsubsection[The t-distribution]{The t-distribution}
 Let $Z$ and $Z_1, Z_2, \ldots, Z_n$, be independent
 standard normals, then
 \begin{align*}
-t = \frac{Z}{\sqrt{\frac{\sum_{i=1}^{n} Z_i ^2}{n}}}
-= \frac{Z}{\sqrt{\frac{\chi(n)^2}{n}}},
+t := \frac{Z}{\sqrt{\frac{\sum_{i=1}^{n} Z_i ^2}{n}}}
+= \frac{Z}{\sqrt{\frac{\chi^2_n}{n}}},
 \end{align*}
 has a $t$-distribution. 
 
@@ -2340,13 +2673,22 @@ as one of the best numerical methods for solving the least squares problem.
 \subsection*{Variance Covariance Matrices}
 Let $X$ be a random vector such that
 \begin{align*}
-X = \left[
-x_1 \\
-x_2 \\
-\vdots
+X = 
+\begin{bmatrix}
+x_1\\
+x_2\\
+\vdots\\
 x_n
-\right[
+\end{bmatrix},
 \end{align*}
+such that the variance covariance matrix of $X$ is 
+given by $V$ and let $a$ and $b$ be vectors in $\mathbb{R}^n$, then 
+\begin{align*}
+\mathrm{Cov}(a^TX, b^TX) = a^T V b = b^T V a.
+\end{align*}
+
+If $A$ is a matrix in $\mathbb{R}^n$, then the covariance of 
+$AX$ is $AVA^T$.
 
 
 \section{Using Chebyshev Methods}
@@ -2812,6 +3154,11 @@ Therefore $E[N] = 1/\phi(-30)$.
 \item What is $\frac{1}{\sqrt{2\pi}}$ approximately?
 
 \emph{Answer}: $0.4$.
+
+\item Let us suppose that X is a standard normal. What 
+is $E[X|X>0]$.
+
+\emph{Answer}: $\sqrt{\frac{2}{\pi}} \simeq 0.8$.
 
 Polya's Urn: An urn has $n_b=95$ black balls
 and $n_w=5$ white balls. Therefore, the ratio 
