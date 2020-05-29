@@ -1788,16 +1788,19 @@ r_{\pi} &= \sqrt{n-1}
 For a tangible  financial interpretation, each term of our
 return may be labelled as:
 \begin{align*}
-r_{\pi} &= \underbrace{\sqrt{n-1}}_\text{Breadth}
-\underbrace{\mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})}_\text{Skill}
-\underbrace{\sigma_{r_{\pi}}}_\text{Traget risk} 
+r_{\pi} &= \underbrace{\sqrt{n-1}}_\text{Breadth} \quad
+\underbrace{\mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})}_\text{Skill} \quad
+\underbrace{\sigma_{r_{\pi}}}_\text{Traget risk} \quad
 \underbrace{\sigma_{\hat{\epsilon}}}_\text{Opportunity}.
 \end{align*}
 
-
-
-
-
+This also allows us to write the information ratio (IR) as
+\begin{align*}
+IR = \frac{r_{\pi}}{\sigma_{r_\pi}} = 
+\sqrt{n-1}
+\mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})
+\sigma_{\hat{\epsilon}}.
+\end{align*}
 
 \subsection*{What is Alpha?}
 Alpha is a forecast of residual return.
@@ -1830,9 +1833,9 @@ of the asset and the market respectively, then
 \end{equation}
 
 \section*{Linear Regression}
-What is the best approximation of a random variable $Y$ by a constant $r$? Depends on 
-what we mean by best. We define best approximation as the one
-with minimum mean squared error (MSE):
+What is the best approximation of a random variable $Y$ by a constant $r$? The answer
+depends on what we mean by ``best". The most common way is to identify the best 
+approximation as the one with minimum mean squared error (MSE):
 \begin{align*}
 r_* = \min_{r} \mathrm{E}[(Y-r)^2],
 \end{align*}
@@ -1856,6 +1859,9 @@ is the variance of $Y$, i.e.,
 Next, we assume that the output random variable $Y$ is 
 related to an input random variable $X$ and
 there is a joint density function $f_{XY}(x,y)$. 
+To be precise, $X$ and $Y$ need not have any apparent
+relationship, all we assume is a joint distribution
+$f_{XY}(x,y)$.
 
 We now ask, what is the best approximation of $Y$ by a function $r(X)$, i.e., what choice 
 of the function $r$ will minimize
@@ -1863,8 +1869,9 @@ of the function $r$ will minimize
 \mathrm{E}_{XY}[(Y-r(X))^2] = \int \int (y-r(x))^2 f_{XY}(x, y) dx dy.
 \end{align*}
 
-One can minimize the above integral to find the function $r_*$, however, we will use the tower law of 
-expectation trick here. (For a proof based on integral minimization, see \cite[pp. 263]{papoulis2002probability}). We re-write the total expectation 
+One can minimize the above integral to find the function $r_*$, however, the same 
+proof can be replicated in essence using the tower law of 
+expectation. (For a proof based on integral minimization, see \cite[pp. 263]{papoulis2002probability}). We re-write the total expectation 
 using the tower law which allows us to use the result we just derived
 for approximating $Y$ by a constant:
 \begin{align*}
@@ -1886,21 +1893,86 @@ $\mathrm{E}[Y|X]$ is called the
 \emph{regression function} or the 
 \emph{conditional expectation function}.
 
-Linear regression assumes a linear model, i.e.,
-$X$ and $Y$ are linearly related:
+\begin{theorem}[Orthogonal Decomposition]
+Let $X$ and $Y$ be two random variables with
+joint distribution $f_{XY}(x, y)$. We can decompose
+$Y$ as
+\begin{align*}
+Y = \mathrm{E}[Y|X] + \epsilon,
+\end{align*}
+such that,
+\begin{align*}
+\mathrm{E}[\epsilon|X] = 0,
+\end{align*} 
+and for any function $g(X)$
+\begin{align*}
+\mathrm{E}[g(X)\epsilon] = 0.
+\end{align*}
+
+any function $g$. 
+\end{theorem}
+
+\begin{proof}
+The decomposition
+\begin{align*}
+Y = \mathrm{E}[Y|X] + \epsilon,
+\end{align*}
+only requires the existence of conditional means, which we
+are assuming implicitly. We have little interest in considering odd cases of 
+distributions where means and variances are not finite. 
+At a more philosophical level, one can observe the values of $X$ and $Y$
+and define $\epsilon$ by subtracting from $Y$ the conditional 
+expectation ${E}[Y|X]$.
+
+The important insight of the theorem lies in the fact that the 
+``error" $\epsilon$ is 
+orthogonal to the best approximation $\mathrm{E}[Y|X]$. To prove
+this, we take conditional expectation on either side of the above 
+decomposition. This results in
+\begin{align*}
+\mathrm{E}[Y|X] &= \mathrm{E}[\mathrm{E}[Y|X]|X]  + \mathrm{E}[\epsilon|X]\\
+&= \mathrm{E}[Y|X]  + \mathrm{E}[\epsilon|X],
+\end{align*}
+which implies $\mathrm{E}[\epsilon|X] = 0$.
+
+For the second assertion, consider the tower law of iteration,
 
 \begin{align*}
-Y = \beta_0 + \beta_1 X + \epsilon,
+\mathrm{E}[g(X)\epsilon] &= \mathrm{E}[\mathrm{E}[g(X)\epsilon|X]]\\
+&= \mathrm{E}[g(X)\mathrm{E}[\epsilon|X]]\\
+&= \mathrm{E}[g(X) \cdot 0]\\
+&= 0,
 \end{align*}
-where $\epsilon$ is a noise term, and 
-furthermore, linear regression assumes that the regression function 
-or the conditional expectation is \emph{exactly} linear in $X$, i.e.\
-the conditional expectation of the noise term is zero:
+where the second last equation follows from our previous result:
+$\mathrm{E}[\epsilon|X] = 0$.
+\end{proof}
+
+\begin{corollary} Under the above decomposition 
+$\mathrm{E}[\epsilon] = 0$.
+\end{corollary}
+\begin{proof}
+Choose $g(X) \equiv 1$ in the 
+previous theorem. 
+\end{proof}
+
+So far, we have just presented the 
+conditional expectation function $\mathrm{E}[Y|X]$
+without any assumptions on how $X$ and $Y$ might
+be related. 
+
+Linear regression assumes that the
+the conditional expectation is \emph{linear} in $X$, i.e.\
 \begin{align*}
 \mathrm{E}[Y|X] = \beta_0 + \beta_1 X,
 \end{align*}
-
-or equivalently:
+Or equivalently, substituting the above into the 
+decomposition of the previous theorem, we can say that
+a linear model assumes that 
+$X$ and $Y$ are linearly related:
+\begin{align*}
+Y = \beta_0 + \beta_1 X + \epsilon,
+\end{align*}
+where $\epsilon$ is a noise term, such that:
 \begin{align*}
 \mathrm{E}[\epsilon|X] = 0.
 \end{align*}
@@ -1908,14 +1980,12 @@ or equivalently:
 All the assumptions of the linear 
 model are as follows:
 \begin{enumerate}
-\item residual $\epsilon$ has zero conditional mean: $\mathrm{E}[\epsilon|X] = 0$
-\item residuals are uncorrelated: 
+\item error term $\epsilon$ has zero conditional mean: $\mathrm{E}[\epsilon|X] = 0$
+\item errors are uncorrelated: 
 $\mathrm{E}[\epsilon_i \epsilon_j |X] = 0$ for $i \neq j$.  
-\item residuals have a constant variance: $\mathrm{E}[\epsilon^2|X] = 
+\item errors have a constant variance: $\mathrm{E}[\epsilon^2|X] = 
 \mathrm{Var}[\epsilon|X] = \sigma^2$.
 \end{enumerate} 
-
-
 
 The simplest case of linear regression is when 
 we assume that both $X$ and $Y$ are one dimensional
@@ -1926,10 +1996,10 @@ y_i = \beta_0 + \beta_1 x_i + \epsilon_i,
 \end{align*}
 such that
 \begin{enumerate}
-\item residuals $\epsilon_i$ have zero mean: $\mathrm{E}[\epsilon_i|X] = 0$
-\item residuals are uncorrelated: 
+\item errors $\epsilon_i$ have zero mean: $\mathrm{E}[\epsilon_i|X] = 0$
+\item errors are uncorrelated: 
 $\mathrm{E}[\epsilon_i \epsilon_j |X] = 0$ for $i \neq j$.  
-\item residuals have constant variance: $\mathrm{E}[\epsilon_i^2|X] = \mathrm{Var}[\epsilon_i|X] = \sigma^2$.
+\item errors have constant variance: $\mathrm{E}[\epsilon_i^2|X] = \mathrm{Var}[\epsilon_i|X] = \sigma^2$.
 \end{enumerate} 
 
 Note that $\mathrm{E}[\epsilon_i|X] = 0$ implies $\mathrm{E}[\epsilon_i]=0$,
@@ -2737,6 +2807,48 @@ Bessel's inequality, which gives,
 
 \section*{Questions}
 \begin{enumerate}
+\item We have two matrices
+$A$ and $B$, both having the same number of 
+rows. How can we check if the column space of 
+$A$ and the column space of $B$ are equal?
+
+Find the row reduced echelon form (RREF) of 
+both $A^{T}$ and $B^{T}$ and discard the 
+zero rows. The column spaces of 
+$A$ and $B$ are equal iff 
+\begin{align*}
+\mathrm{RREF}(A^{T}) &= \mathrm{RREF}(B^{T})\\
+U_n U_{n-1} \ldots U_2 U_1 A^{T} &= 
+V_m V_{m-1} \ldots V_2 V_1 B^{T}\\
+UA^{T} &= VB^{T},
+\end{align*}
+where $U_{i}, V_{j}, U, V$ are invertible. 
+
+\item Evaluate $\int_{0}^{1} \frac{x - 1}{\ln x} \:dx.$
+
+Use Feynman's trick. Let 
+\begin{align*}
+I(\alpha) = \int_{0}^{1} \frac{x^{\alpha} - 1}{\ln x} \:dx,
+\qquad \alpha \in (0, 1).
+\end{align*}
+Note that $I(0) = 0$.  Differentiate $I$ w.r.t $\alpha$, 
+we get
+\begin{align*}
+I'(\alpha) &= \int_{0}^{1} x^{\alpha} \:dx,
+\qquad \alpha \in (0, 1)\\
+&= \frac{1}{\alpha + 1}.
+\end{align*}
+Integrating the last result again, we get
+\begin{align*}
+I(\alpha) &= \ln(\alpha + 1) + I(0)\\
+&= \ln(\alpha + 1).
+\end{align*}
+The last equation implies,
+\begin{align*}
+\lim_{\alpha \to 1} I(\alpha) = \ln(2).
+\end{align*}
+ 
+
 \item Suppose $X$ and $Y$ are positive 
 random variables. What is the relationship between
 $P(X+Y>4)$ and $P(X>2)P(Y>2)$? Is one greater, smaller
