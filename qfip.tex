@@ -729,7 +729,7 @@ $9 = 5^2 - 4^2 > 4^2 - 3^2 = 7$ and this is called convexity.
 If you are long a convex payoff, you make more money 
 on the up move than you would lose on a down move of equal magnitude.
 
-Mathematically, for $x>0$,
+Mathematically, for $x, \delta x > 0$,
 $(x+\delta x)^2 - (x - \delta x )^2 \simeq 4x\delta x > 0$.
 
 \section*{Derivatives on Foreign Indices}
@@ -803,16 +803,31 @@ selling or buying the coupon of a treasury bond separately from the principal.
 \item Spread: Spread is the constant (absolute) shift to the zero-coupon discount curve in all scenarios that is required to ensure that the model value of the bond (average value over all scenarios) equals the observed market price \cite{dor2007dtssm}.
 \item Rally: When bond prices go up and yields go down.
 \item Sell-Off: When bond prices go down and yields go up (opposite of a rally).
-\item Long CDS: When you have sold protection via a credit default swap. In this 
-case you are long the credit of the company you have sold the protection on. You 
-are short a put option on the company's credit rating. 
-\item Long Credit: Same as a long CDS position. You are short put on a 
-company's credit rating.
-\item DTS: Duration times spread. This is a measure of credit risk.
+\item Long Credit using CDS: When you have sold protection via a credit default swap. In this case you are long the credit of the company you have sold protection on. You are short a put option on the company's debt. You will make money
+if the CDS spread tightens.
+\item Short Credit using CDS: When you have bought protection via a credit default swap. In this case you are short the credit of the company you have bought protection on. You are long a put option on the company's debt. You will make money
+if the CDS spread widens.
+\item DTS: Spread duration times spread. This is a measure of credit risk which 
+gives better estimate of credit volatility than using spread duration. If $s$ is the 
+spread and $D_s$ the spread duration of a credit security, the spread return $r_{spread}$ can be approximated
+as 
+\begin{equation}
+r_{spread} \simeq -D_s \Delta s,
+\end{equation}
+or equivalently, after multiplying and dividing by 
+$s$, as, 
+\begin{equation}
+r_{spread} \simeq -D_s  \times s \left( \frac{ \Delta s}{s} \right).
+\end{equation}
+Empirically, the markets have shown the last 
+equation above is a better approximation, especially
+for volatility prediction of $r_{spread}$ and hence 
+$D_s  \times s$ (DTS) is a better measure of credit risk. 
+
 \item Bond Price--Yield--Duration--Convexity:
 Let $y$ be the yield of a bond with price $P$. Then  
 \begin{equation}
-\frac{1}{P} dP = -D dy + \frac{1}{2} C dy^2,
+\frac{1}{P} dP \approx -D dy + \frac{1}{2} C dy^2,
 \end{equation}
 where the duration $D$ and the convexity 
 $C$ are defined as
@@ -821,12 +836,42 @@ D &= -\frac{1}{P}\frac{dP}{dy},\\
 C &=  \frac{1}{P}\frac{d^2P}{dy^2}.
 \end{align*}
 
+\item Negative Convexity: For non-callable bonds, the negative relationship between price and 
+yield is usually convex. However, the price-yield relation for callable bonds
+is typically concave due to the callability feature. This phenomenon is called
+negative convexity.
+
+\item Duration sensitivity: Rate of change of duration with respect to 
+yields (or interest rates). 
+\begin{align*}
+\frac{dD}{dy} &= \frac{d}{dy}\left(-\frac{1}{P}\frac{dP}{dy}\right)\\
+&=  \frac{1}{P^{2}}\frac{dP}{dy}\frac{dP}{dy} - \frac{1}{P}\frac{d^{2}P}{dy^{2}}\\
+&= D^{2} - C.
+\end{align*}
+Therefore, the rate of change of duration equals duration squared 
+minus the convexity. 
+
+For bonds with positive convexity, the duration can increase or decrease 
+depending on the interplay between the $D^{2}$ and the $C$ term. 
+
+For bonds with negative convexity, the duration increases with increase 
+in interest rates and vice-versa. 
+
+Historically,  the US aggregate index has shown rates-up-duration-up
+behaviour due to the callability feature of various bonds in the index
+composition. This pattern holds even more strongly in the US Mortgage Backed Securities (MBS). The US Credit Index on the other hand has historically followed the more intuitive rates-up-duration-down behaviour. Also note that there are indices which do not show a reliable impact of rate changes on duration changes either way. 
+
 \item CDS Spread: Credit default swaps are priced in terms of a spread usually expressed in basis points of the notional value. A CDS quote of 4.55 means that the CDS is pricing at a spread of 4.55 bp, or .0455\% i.e., to buy \$$10000$ of protection, you have to pay \$$4.55$ per year.
 
 \item EDF: Expected Default frequency. The default probability predicted by Moody's KMV model.
 
 \item Defensiveness: In general, defensiveness means the negative correlation of a signal with 
 down markets. In the context of credit, defensiveness of a signal means the negative correlation of the signal with the expected default frequency.
+
+\item The economic cycle and bond prices (The Economist): 
+Bond prices move in the opposite direction to confidence
+in the market; bond yields go in the same direction as confidence. When the outlook for the economy is bleak,  yields fall sharply as investors rush to the safety of bonds. As the outlook brightens, bond prices start to fall and yields start to rise again. Bond prices are thus countercyclical most of the time. This feature makes them very attractive diversifiers for equities, the prices of which are more procyclical, moving up and down in tandem with the economic cycle.
+
 
 \end{itemize}
 \subsection{Hazard Rate}
@@ -1377,8 +1422,8 @@ x_n = \frac{1}{2\pi}
 \section{Portfolio Theory}
 Suppose we have a universe of 
 $n$ assets, and the returns of these assets
-are given by a $n$-vector 
-$r =[a_1, a_2, \ldots, a_n]^T$.
+are given by a $n$-vector random 
+variable $r =[r_1, r_2, \ldots, r_n]^T$.
 
 We assume that the mean of $r$ is given by 
 \begin{align*}
@@ -1392,7 +1437,10 @@ We assume that the mean of $r$ is given by
 \end{align*}
 while the covariance matrix of $r$ is given by
 \begin{align*}
-\Sigma = \begin{bmatrix}
+\Sigma = \mathrm{E}
+\left[(r - \mu)(r-\mu)^{T}
+\right] = 
+\begin{bmatrix}
 \sigma_1^2  & \sigma_{12} & \cdots & \sigma_{1n}\\
 \sigma_{12} & \sigma_2^2  & \cdots & \sigma_{2n}\\
 \vdots      & \vdots      & \vdots & \vdots \\
@@ -1408,7 +1456,7 @@ Note that $\sigma_{ij} = \rho_{ij} \sigma_i \sigma_j$.
 The return of our portfolio $r_p$ is a linear combination of 
 weighted asset returns:
 \begin{align*}
-r_p = w \cdot r,
+r_p = w \cdot r := w^{T}r,
 \end{align*}
 where $w = [w_1, w_2, \ldots, w_n]^T$ is a weight 
 vector such that \
@@ -1539,7 +1587,7 @@ with $m$ exposure constraints,
 w \cdot a_1 &= c_1,\\
 w \cdot a_2 &= c_2,\\
 ~       &\vdots ~ \\
-w \cdot a_n &= c_m,
+w \cdot a_m &= c_m,
 \end{align*}
 $m < n$, 
 has the form
@@ -1547,10 +1595,10 @@ has the form
 w^{*} = b_f w_f + b_1 w_1 + b_2 w_2 + \ldots + b_m w_m,
 \end{equation*}
 where $b_f, b_1, b_2, \ldots, b_m$ are scalars and 
-$w_i$ is the characteristic portfolio of the attribute vector $a_i$. 
+$w_i$ are the weights of the characteristic portfolio of the attribute vector $a_i$. 
 
 Furthermore, assuming that $a_i$ are 
-linearly independent, we can find $w$ by 
+linearly independent, we can find $w^{*}$ by 
 solving a linear system of equations completely determined 
 by the characteristic portfolio weights $w_1, w_2, \ldots, w_m$. 
 \end{theorem}
@@ -1662,17 +1710,35 @@ since $A, D, \Sigma^{-1}$ are invertible, a unique
 solution $b$ exists. 
 \end{proof}
 
+\subsection*{What is Alpha?}
+Alpha is a forecast of residual return.
+Under the Grinold Kahn Framework (GKF), a rule
+of thumb for alpha is given by:
+
+Alpha = Volatility . IC . score
+
+Mathematically, we can write 
+\begin{equation}
+\alpha = \sigma \rho_{z, r_r} z,
+\end{equation}
+where $\rho_{z,r_r}$ (also known as the 
+Information coefficient or IC) is the 
+correlation of score with 
+residual return $r_r$, $\sigma$ is the 
+volatility of the residual return
+and $z$ is the standardized $z$-score or the
+signal value. 
+
+
 \subsection*{Alpha Derivation}
 Let's assume that $f$ is a forecast vector 
-in $\mathbb{R}^n$ and $\Sigma$ is 
-an $\mathbb{R}^{n\times n}$ 
-symmetric positive definite covariance
-matrix obtained from a factor model and 
-$\lambda \geq 0$ is the risk aversion 
+in $\mathbb{R}^n$ and $\Sigma \in \mathbb{R}^{n\times n}$ 
+is a symmetric positive definite covariance
+matrix and $\lambda > 0$ is the risk aversion 
 parameter. 
 
-Our aim is to solve a constrained mean-variance optimization
-problem. We want to find
+Our aim is to solve the following constrained mean-variance optimization
+problem:
 \begin{align*}
 \argmax_{w \in \mathbb{R}^n} ~ w^{T} f - \frac{1}{2} \lambda w^{T} \Sigma w,
 \end{align*}
@@ -1801,25 +1867,6 @@ IR = \frac{r_{\pi}}{\sigma_{r_\pi}} =
 \mathrm{Corr}(\hat{\alpha}, \hat{\epsilon})
 \sigma_{\hat{\epsilon}}.
 \end{align*}
-
-\subsection*{What is Alpha?}
-Alpha is a forecast of residual return.
-Under the Grinold Kahn Framework (GKF), a rule
-of thumb for alpha is given by:
-
-Alpha = Volatility . IC . score
-
-Mathematically, we can write 
-\begin{equation}
-\alpha = \sigma \rho_{z, r_r} z,
-\end{equation}
-where $\rho_{z,r_r}$ (also known as the 
-Information coefficient or IC) is the 
-correlation of score with 
-residual return $r_r$, $\sigma$ is the 
-volatility of the residual return
-and $z$ is the standardized $z$-score or the
-signal value. 
 
 \subsection*{What is Beta?}
 Beta of an asset is the regression coefficient
