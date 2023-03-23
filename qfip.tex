@@ -4,6 +4,8 @@
 %% Sep 29, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
 %------------------------------------------------------------
 %
 \documentclass{amsart}
@@ -45,6 +47,12 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{parskip}
+
+
+\usepackage{subcaption}
+
+
+
 %------------------------------------------------------------
 % Theorem like environments
 %
@@ -76,7 +84,7 @@
 
 %--------------------------------------------------------
 \begin{document}
-\title[Math Finance]{Mathematical Finance in Practice}
+\title[Quant Finance]{Quantitative Finance in Practice}
 \author{Mohsin Javed}
 \address[London]
 {Pret A Manger, Marble Arch Station, \newline%
@@ -2854,6 +2862,18 @@ Bessel's inequality, which gives,
 
 \section*{Questions}
 \begin{enumerate}
+\item Six vectors $\mathbf{v_1}, \mathbf{v_2}, \ldots, \mathbf{v_6}$ are  chosen
+to be either $[1, 1]^T$ or $ [3, 2]^T$ with equal probability, with each choice made independently. What is the probability that the sum $\mathbf{v_1} + \mathbf{v_2} + \ldots + \mathbf{v_6}$ is equal to the vector $[10, 8]^T$
+\cite{mat2021}
+?
+
+Let's first find the number of ways we can sum to $[10, 8]^T$. Let $n$ be the number of times $[1, 1]^T$ is chosen. Then $[3, 2]^T$ is chosen $6-n$ times. 
+Setting $n [1, 1]^T + (6-n) [3, 2]^T = [10, 8]$ gives $n=4$ as the only choice.
+
+The probability of choosing the vector $[1, 1]^t$ 4 times is the same as 
+the probability of 4 heads in 6 independent tosses of a fair coin:
+$$P(k=4) = \binom{6}{4} (0.5)^4 (0.5)^{6-4} = \frac{15}{64}.$$ 
+
 \item We have two matrices
 $A$ and $B$, both having the same number of 
 rows. How can we check if the column space of 
@@ -3411,6 +3431,27 @@ the expectation operator.
 	
 \item Local Vol Model: 
 \end{itemize}
+
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.8\textwidth}
+        \includegraphics[width=\textwidth]{mouse}
+        \caption{This is the first subcaption}
+        \label{fig:a}
+    \end{subfigure}
+    
+    \begin{subfigure}[b]{0.8\textwidth}
+        \includegraphics[width=\textwidth]{mouse}
+        \caption{This is the second subcatpion}
+        \label{fig:b}
+    \end{subfigure}
+    
+    \caption{This is the overall caption}\label{fig:overall}
+\end{figure}
+
+
 
 %\bibliographystyle{plain}
 \bibliographystyle{abbrv}
