@@ -90,7 +90,7 @@
 {Pret A Manger, Marble Arch Station, \newline%
 \indent Oxford Street, London}%
 \email[Mohsin Javed]{mhsnjvd@gmail.com}%
-\urladdr{http://www.zindajaved.com}
+%\urladdr{http://www.zindajaved.com}
 %\thanks{This paper is in final form and no version of it will be submitted for
 %publication elsewhere.}
 \date{September 29, 2017}
@@ -2462,9 +2462,8 @@ PA = LU,
 where $P$ is a permutation matrix, $L$ is a lower triangular
 and $U$ is an upper triangular.
 
-The algorithm to compute the matrices $L$ and $U$, given $A$ is 
-essentially the row reduced echelon form computation of $A$. 
-We want to apply a sequence of matrices $L_i$ such that 
+Given $A$, the algorithm to compute the matrices $L$ and $U$
+is essentially the same used for computing the row reduced echelon form of $A$. We want to apply a sequence of matrices $L_i$ such that 
 $A$ gets transformed into $U$. 
 \begin{equation}
 L_1 L_2 \ldots L_{n-1} PA = U,
