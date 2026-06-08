@@ -2279,6 +2279,13 @@ Taking expectation w.r.t $Z$, we get,
 \end{align*}
 
 \end{proof}
+
+\section{Machine Learning}
+\subsection{KL Divergence}
+The KL divergence between two probability distributions $P$ and $Q$ is defined as
+\begin{align*}
+D_{KL}(P||Q) = \int p(x) \log \frac{p(x)}{q(x)} dx,
+\end{align*}
 \section{Matrices}
 \subsection{Rank Theorem}
 \begin{theorem}
@@ -2501,8 +2508,58 @@ A \text{ is normal } \Leftrightarrow A^*A = AA^*.
 \end{tabular}
 \end{center}
 
-\subsection*{Real Quadratic Form}
-Let $A$ be a square matrix in $\mathbb{C}^{n \times n}$.
+\subsection*{Bilinear Functionals and Quadratic Forms}
+Let $V$ be a vector space and $x, y \in V$. The mapping $\phi$
+form $V \times V$ into $\mathbb{C}$ is called a bilinear functional if $\phi$ is  
+linear in the first argument and conjugate linear in the second. 
+
+$\phi$ is symmetric (or sometimes called Hermitian)
+if $\phi(x, y) = \phi^*(y, x)$.
+
+Any bilinear functional $\phi$ induces a \emph{quadratic form} $\hat{\phi}$ via 
+the relation:
+$$\hat{\phi}(x) = \phi(x, x).$$
+
+Surprisingly, a quadratic form completely determines a bilinear functional.
+
+\begin{equation*}
+	\phi(x, y) = \hat{\phi}\left(\frac{1}{2}(x + y)\right) - \hat{\phi}\left(\frac{1}{2}(x - y)\right)
+	            +i\hat{\phi}\left(\frac{1}{2}(x + iy)\right) - i\hat{\phi}\left(\frac{1}{2}(x - iy)\right)
+\end{equation*}
+The above equation is known as the 
+\emph{polarization identity} and 
+implies the following result.
+\begin{theorem}
+	If $\phi$ and $\psi$ are two bilinear functionals such that 
+	$\hat{\phi} = \hat{\psi}$, then $\phi = \psi$.
+\end{theorem}
+
+\begin{theorem}
+	A bilinear functional is Hermitian iff the associated quadratic form is real. 
+\end{theorem}
+\begin{proof}
+	Suppose $\phi$ is Hermitian. Then $\phi(x, y) = \phi^*(y, x)$, therefore, 
+	$$\hat{\phi}(x) = \phi(x, x) = \phi^*(x, x) = \hat{\phi}^*(x).$$
+	Hence, $\hat{\phi}(x)$ is real.
+
+	Conversely, suppose $\hat{\phi}(x)$ is real.
+	Define the bilinear functional $\psi(x, y) = \phi^*(y, x)$ which induces the quadratic 
+	form $\hat{\psi}(x) = \psi(x, x) = \phi^*(x, x) = \hat{\phi}^*(x) = \hat{\phi}(x)$, 
+	because $\hat{\phi}(x)$ is real. Since $\hat{\phi}(x) = \hat{\psi}(x)$ are the 
+	same, Theorem above says that $\phi(x, y) = \psi(x, y) = \phi^*(y, x)$.
+	Hence, $\phi$ is Hermitian.
+\end{proof}
+
+A linear transformation $A$ induces a bilinear functional via the obvious 
+definition: $\phi(x, y) = \langle x, Ay \rangle = x^*Ay$.
+
+\begin{corollary}
+	A is Hermitian iff $x^*Ax$ is real.
+\end{corollary}
+
+A much longer proof is as follows. (Only one direction,
+the other direction is straight forward). Let $A$ be 
+a square matrix in $\mathbb{C}^{n \times n}$.
 If,
 $$ x^*Ax \in \mathbb{R}, \quad \forall x \in \mathbb{C}^n,$$
 then $A$ is Hermitian. 
@@ -2543,6 +2600,13 @@ hence $A = A^*$.
 
 \end{proof}
 
+
+An \emph{inner product} is a symmetric (Hermitian), 
+strictly positive bilinear functional.
+
+The positive square root of the quadratic form 
+induced by an inner product is called a 
+\emph{Norm}.
 
 
 \subsection{Cholseky Decomposition in Finance}
@@ -2814,24 +2878,61 @@ given by $V$ and let $a$ and $b$ be vectors in $\mathbb{R}^n$, then
 If $A$ is a matrix in $\mathbb{R}^n$, then the covariance of 
 $AX$ is $AVA^T$.
 
+\section*{Approximations}
+\subsection*{Stirling's Approximation}
+\begin{align*}
+n! \approx \sqrt{2\pi n} \left(\frac{n}{e}\right)^n.
+\end{align*}	
 
-\section{Using Chebyshev Methods}
-\begin{enumerate}
-\item write a basic core
-\item must have a root finder
-\end{enumerate}
-
-Where can it be used?
-\begin{enumerate}
-\item Corr Bump: It's a 1d root finding problem
-\end{enumerate}
 
 \section*{Inequalities}
+
+\subsection*{Young's Inequality}
+For any $a, b \geq 0$ and $p, q > 1$ such that $\frac{1}{p} + \frac{1}{q} = 1$, we have
+\begin{align*}
+ab \leq \frac{a^p}{p} + \frac{b^q}{q}.
+\end{align*}
+
+\begin{proof}Because the logarithm function is concave, we have
+\begin{align*}
+\log\left(\frac{a^p}{p} + \frac{b^q}{q}\right) & \geq
+\frac{1}{p} \log(a^p) + \frac{1}{q} \log(b^q) = \log(a) + \log(b) =
+\log(ab).
+\end{align*}
+The inequality follows by exponentiating both sides.
+\end{proof}
+
+\subsection*{H\"{o}lder's Inequality}
+For any $x \in \ell^p$, $y \in \ell^q$ with $p, q > 1$ such that 
+$\frac{1}{p} + \frac{1}{q} = 1$, we have
+\begin{align*}
+	\|xy\|_1 \leq \|x\|_p \|y\|_q,
+\end{align*}
+or equivalently,
+\begin{align*}
+\sum_{i=1}^{\infty} |x_i y_i| \leq \left(\sum_{i=1}^{\infty} |x_i|^p\right)^{\frac{1}{p}} \left(\sum_{i=1}^{\infty} |y_i|^q\right)^{\frac{1}{q}}.
+\end{align*}
+\begin{proof}Let 
+	$$a_i = \frac{\left|x_i\right|}{\left(\sum_{i=1}^{\infty} |x_i|^p\right)^{\frac{1}{p}}}, 
+	\quad b_i = \frac{\left|y_i\right|}{\left(\sum_{i=1}^{\infty} |y_i|^q\right)^{\frac{1}{q}}},$$
+	and apply Young's inequality to $a_i$ and $b_i$ to get
+\begin{align*} 
+	a_i b_i & \leq \frac{a_i^p}{p} + \frac{b_i^q}{q} \\
+	& = \frac{1}{p}\frac{\left|x_i\right|^p}{\left(\sum_{i=1}^{\infty} |x_i|^p\right)} + 
+  \frac{1}{q}\frac{\left|y_i\right|^q}{\left(\sum_{i=1}^{\infty} |y_i|^q\right)}.
+\end{align*}
+Now, sum over $i$ and use the fact that $\frac{1}{p} + \frac{1}{q} = 1$ to get
+\begin{align*}
+\sum_{i=1}^{\infty} a_i b_i & \leq \frac{1}{p} + \frac{1}{q} = 1.
+\end{align*}
+The inequality follows by multiplying both sides by $\left(\sum_{i=1}^{\infty} |x_i|^p\right)^{\frac{1}{p}} \left(\sum_{i=1}^{\infty} |y_i|^q\right)^{\frac{1}{q}}$.
+\end{proof}
+
 \subsection*{Bessel's Inequality}
-Projection of a vector is at most as big 
+In a Hilbert space, the projection of a vector is at most as big 
 as the vector. 
 \begin{proof}
-Let ${x_j}$ be an orthonormal set in a Hilbert space $\mathcal{H}$.
+Let ${x_j}$ be an orthonormal set in the Hilbert space $\mathcal{H}$.
 For any $x \in \mathcal{H}$, we have, 
 \begin{align*}
 0 \leq \left\|x - \sum_{j}(x, x_j) x_j\right\|^2 = 
